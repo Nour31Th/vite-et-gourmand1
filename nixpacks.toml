@@ -1,5 +1,8 @@
 [phases.setup]
-nixPkgs = ["php83", "php83Extensions.pdo", "php83Extensions.pdo_pgsql", "php83Extensions.intl", "php83Extensions.mbstring", "php83Extensions.xml", "composer"]
+nixPkgs = ["php83", "php83Extensions.pdo", "php83Extensions.pdo_pgsql", "php83Extensions.pgsql", "php83Extensions.intl", "php83Extensions.mbstring", "php83Extensions.xml", "composer"]
+
+[phases.build]
+cmds = ["COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader --no-scripts"]
 
 [start]
-cmd = "composer install --no-dev && php bin/console doctrine:migrations:migrate --no-interaction && php -S 0.0.0.0:$PORT -t public/"
+cmd = "php bin/console cache:warmup --env=prod && php bin/console doctrine:migrations:migrate --no-interaction --env=prod && php -S 0.0.0.0:$PORT -t public/"
