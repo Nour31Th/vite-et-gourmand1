@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Laisser un avis — Vite & Gourmand{% endblock %}
+
+{% block body %}
+
+<div style="background:var(--beige);padding:20px;text-align:center">
+    <h1 style="font-family:'Montserrat',sans-serif;font-size:36px;font-weight:700;color:var(--brun)">
+        Laisser un avis
+    </h1>
+</div>
+
+<section style="padding:48px 80px;background:var(--bgclair);min-height:60vh;display:flex;align-items:center;justify-content:center">
+    <div style="background:#fff;border-radius:8px;padding:32px;border:.5px solid #e0ddd5;width:100%;max-width:540px">
+        <form method="post" action="{{ path('app_user_soumettre_avis') }}">
+            <input type="hidden" name="commande_id" value="{{ commande_id }}">
+
+            <div class="mb-4">
+                <label style="font-size:12px;font-weight:700;color:var(--brun);display:block;margin-bottom:8px">Note *</label>
+                <div class="d-flex gap-2">
+                    {% for i in 1..5 %}
+                    <div>
+                        <input type="radio" name="note" id="note{{ i }}" value="{{ i }}" required style="display:none">
+                        <label for="note{{ i }}" style="font-size:32px;color:#e0ddd5;cursor:pointer" class="star-label">★</label>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label for="commentaire" style="font-size:12px;font-weight:700;color:var(--brun)">Commentaire *</label>
+                <textarea id="commentaire" name="commentaire" class="form-control mt-1" rows="4" required placeholder="Partagez votre expérience..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-vert w-100" style="font-size:15px;padding:12px">
+                Envoyer mon avis
+            </button>
+        </form>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block javascripts %}
+<script>
+document.querySelectorAll('.star-label').forEach((star, index) => {
+    star.addEventListener('click', () => {
+        document.querySelectorAll('.star-label').forEach((s, i) => {
+            s.style.color = i <= index ? 'var(--terre)' : '#e0ddd5';
+        });
+    });
+    star.addEventListener('mouseover', () => {
+        document.querySelectorAll('.star-label').forEach((s, i) => {
+            s.style.color = i <= index ? 'var(--terre)' : '#e0ddd5';
+        });
+    });
+});
+</script>
+{% endblock %}

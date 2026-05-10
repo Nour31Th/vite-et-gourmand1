@@ -1,0 +1,140 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon compte — Vite & Gourmand{% endblock %}
+
+{% block body %}
+
+<div style="background:var(--beige);padding:20px;text-align:center">
+    <h1 style="font-family:'Montserrat',sans-serif;font-size:36px;font-weight:700;color:var(--brun)">
+        Mon compte
+    </h1>
+    <p style="font-size:14px;color:var(--brun)">Bonjour {{ user.prenom }} {{ user.nom }} !</p>
+</div>
+
+<section style="padding:48px 80px;background:var(--bgclair)">
+    <div class="row g-4">
+
+        {# SIDEBAR #}
+        <div class="col-md-3">
+            <div style="background:#fff;border-radius:8px;padding:16px;border:.5px solid #e0ddd5">
+                <div style="text-align:center;padding:16px 0;border-bottom:.5px solid #e0ddd5;margin-bottom:12px">
+                    <div style="width:60px;height:60px;border-radius:50%;background:var(--beige);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:var(--brun);margin:0 auto 8px">
+                        {{ user.prenom|first }}{{ user.nom|first }}
+                    </div>
+                    <div style="font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;color:var(--brun)">{{ user.prenom }} {{ user.nom }}</div>
+                    <div style="font-family:'Lexend',sans-serif;font-size:11px;color:#6B6B5A">{{ user.email }}</div>
+                </div>
+                <nav>
+                    <a href="{{ path('app_user_dashboard') }}" style="display:block;padding:8px 12px;border-radius:6px;font-size:13px;color:var(--brun);text-decoration:none;background:var(--bgclair);margin-bottom:4px;font-weight:700">
+                        Mes commandes
+                    </a>
+                    <a href="{{ path('app_user_profil') }}" style="display:block;padding:8px 12px;border-radius:6px;font-size:13px;color:var(--brun);text-decoration:none;margin-bottom:4px">
+                        Mon profil
+                    </a>
+                    <a href="{{ path('app_logout') }}" style="display:block;padding:8px 12px;border-radius:6px;font-size:13px;color:#dc2626;text-decoration:none;margin-top:8px;border-top:.5px solid #e0ddd5;padding-top:12px">
+                        Déconnexion
+                    </a>
+                </nav>
+            </div>
+        </div>
+
+        {# CONTENU PRINCIPAL #}
+        <div class="col-md-9">
+            <h2 style="font-family:'Poppins',sans-serif;font-size:20px;font-weight:600;color:var(--brun);margin-bottom:20px">Mes commandes</h2>
+
+            {% if commandes|length == 0 %}
+            <div style="background:#fff;border-radius:8px;padding:32px;text-align:center;border:.5px solid #e0ddd5">
+                <p style="color:#6B6B5A;font-size:14px;margin-bottom:16px">Vous n'avez pas encore de commandes.</p>
+                <a href="{{ path('app_menu_index') }}" class="btn btn-vert" style="font-size:14px">
+                    Voir nos menus
+                </a>
+            </div>
+            {% else %}
+            {% for commande in commandes %}
+            <div style="background:#fff;border-radius:8px;padding:20px;margin-bottom:16px;border:.5px solid #e0ddd5">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <div style="font-family:'Poppins',sans-serif;font-size:15px;font-weight:600;color:var(--brun)">
+                            {{ commande.menu.titre }}
+                        </div>
+                        <div style="font-family:'Lexend',sans-serif;font-size:11px;color:#6B6B5A">
+                            N° {{ commande.numeroCommande }}
+                        </div>
+                    </div>
+                    <div>
+                        {% set statut = commande.statut %}
+                        {% set couleurs = {
+                            'en_attente': '#f59e0b',
+                            'accepte': '#3b82f6',
+                            'en_preparation': '#8b5cf6',
+                            'en_cours_livraison': '#ec4899',
+                            'livre': '#10b981',
+                            'en_attente_materiel': '#f97316',
+                            'terminee': '#5C7A5C',
+                            'annulee': '#ef4444'
+                        } %}
+                        <span style="background:{{ couleurs[statut] ?? '#6B6B5A' }};color:#fff;font-family:'Lexend',sans-serif;font-size:11px;padding:4px 10px;border-radius:10px">
+                            {{ statut|replace({'_': ' '})|capitalize }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="row g-2 mb-3">
+                    <div class="col-md-3">
+                        <div style="font-family:'Lexend',sans-serif;font-size:10px;color:#6B6B5A">Date prestation</div>
+                        <div style="font-size:13px;color:var(--brun);font-weight:700">{{ commande.datePrestation|date('d/m/Y') }}</div>
+                    </div>
+                    <div class="col-md-3">
+                        <div style="font-family:'Lexend',sans-serif;font-size:10px;color:#6B6B5A">Personnes</div>
+                        <div style="font-size:13px;color:var(--brun);font-weight:700">{{ commande.nbPersonnes }}</div>
+                    </div>
+                    <div class="col-md-3">
+                        <div style="font-family:'Lexend',sans-serif;font-size:10px;color:#6B6B5A">Ville</div>
+                        <div style="font-size:13px;color:var(--brun);font-weight:700">{{ commande.villeLivraison }}</div>
+                    </div>
+                    <div class="col-md-3">
+                        <div style="font-family:'Lexend',sans-serif;font-size:10px;color:#6B6B5A">Total</div>
+                        <div style="font-size:13px;color:var(--terre);font-weight:700">{{ commande.prixTotal }} €</div>
+                    </div>
+                </div>
+
+                {# HISTORIQUE STATUTS #}
+                {% if commande.statut != 'en_attente' %}
+                <div style="background:var(--bgclair);border-radius:6px;padding:12px;margin-bottom:12px">
+                    <div style="font-family:'Lexend',sans-serif;font-size:11px;font-weight:700;color:var(--brun);margin-bottom:8px">Suivi de commande</div>
+                    {% for historique in commande.historiqueStatuts %}
+                    <div class="d-flex gap-2 mb-1">
+                        <span style="font-size:10px;color:#6B6B5A;font-family:'Lexend',sans-serif;white-space:nowrap">{{ historique.dateHeure|date('d/m H:i') }}</span>
+                        <span style="font-size:11px;color:var(--brun)">{{ historique.statut|replace({'_': ' '})|capitalize }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {# ACTIONS #}
+                <div class="d-flex gap-2">
+                    {% if commande.statut == 'en_attente' %}
+                    <a href="{{ path('app_user_annuler_commande', {id: commande.id}) }}"
+                       class="btn btn-outline-danger btn-sm"
+                       onclick="return confirm('Confirmer l\'annulation ?')"
+                       style="font-size:12px">
+                        Annuler
+                    </a>
+                    {% endif %}
+                    {% if commande.statut == 'terminee' and commande.avis|length == 0 %}
+                    <a href="{{ path('app_user_avis', {id: commande.id}) }}"
+                       class="btn btn-vert btn-sm"
+                       style="font-size:12px">
+                        Laisser un avis
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
