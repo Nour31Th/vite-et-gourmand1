@@ -40,4 +40,16 @@ class CommandeRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+public function getStatsParMenu(): array
+{
+    return $this->createQueryBuilder('c')
+        ->select('m.titre, COUNT(c.id) as nb_commandes, SUM(c.prix_total) as ca_total')
+        ->join('c.menu', 'm')
+        ->where('c.statut = :statut')
+        ->setParameter('statut', 'terminee')
+        ->groupBy('m.id')
+        ->orderBy('nb_commandes', 'DESC')
+        ->getQuery()
+        ->getResult();
 }
+    }

@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Statistiques — Vite & Gourmand{% endblock %}
+
+{% block body %}
+
+<div style="background:var(--brun);padding:20px;text-align:center">
+    <h1 style="font-family:'Montserrat',sans-serif;font-size:30px;font-weight:700;color:#fff">Statistiques</h1>
+</div>
+
+<section style="padding:32px 80px;background:var(--bgclair)">
+    <div class="d-flex gap-2 mb-4">
+        <a href="{{ path('app_admin_dashboard') }}" class="btn btn-outline-secondary btn-sm">Commandes</a>
+        <a href="{{ path('app_admin_employes') }}" class="btn btn-outline-secondary btn-sm">Employés</a>
+        <a href="{{ path('app_admin_stats') }}" class="btn btn-brun btn-sm">Statistiques</a>
+    </div>
+
+    <div style="background:#fff;border-radius:8px;padding:24px;border:.5px solid #e0ddd5;margin-bottom:24px">
+        <h2 style="font-family:'Poppins',sans-serif;font-size:18px;font-weight:600;color:var(--brun);margin-bottom:20px">
+            Commandes par menu
+        </h2>
+        <canvas id="graphique-menus" height="100"></canvas>
+    </div>
+
+    <div style="background:#fff;border-radius:8px;padding:24px;border:.5px solid #e0ddd5">
+        <h2 style="font-family:'Poppins',sans-serif;font-size:18px;font-weight:600;color:var(--brun);margin-bottom:16px">
+            Chiffre d'affaires par menu
+        </h2>
+        <table class="table table-sm">
+            <thead>
+                <tr style="background:var(--bgclair)">
+                    <th style="font-size:12px;color:var(--brun)">Menu</th>
+                    <th style="font-size:12px;color:var(--brun)">Nb commandes</th>
+                    <th style="font-size:12px;color:var(--brun)">CA total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stat in stats %}
+                <tr>
+                    <td style="font-size:13px">{{ stat.titre }}</td>
+                    <td style="font-size:13px">{{ stat.nb_commandes }}</td>
+                    <td style="font-size:13px;color:var(--terre);font-weight:700">{{ stat.ca_total }} €</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="3" style="text-align:center;color:#6B6B5A;font-size:13px">Aucune commande terminée pour le moment.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block javascripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const stats = {{ stats|json_encode|raw }};
+const ctx = document.getElementById('graphique-menus').getContext('2d');
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: stats.map(s => s.titre),
+        datasets: [{
+            label: 'Nombre de commandes',
+            data: stats.map(s => s.nb_commandes),
+            backgroundColor: '#5C7A5C',
+            borderRadius: 6,
+        }, {
+            label: 'CA (€)',
+            data: stats.map(s => s.ca_total),
+            backgroundColor: '#C4693A',
+            borderRadius: 6,
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { position: 'top' } }
+    }
+});
+</script>
+{% endblock %}

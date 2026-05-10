@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un employé — Vite & Gourmand{% endblock %}
+
+{% block body %}
+
+<div style="background:var(--brun);padding:20px;text-align:center">
+    <h1 style="font-family:'Montserrat',sans-serif;font-size:30px;font-weight:700;color:#fff">Créer un compte employé</h1>
+</div>
+
+<section style="padding:48px 80px;background:var(--bgclair);min-height:60vh;display:flex;align-items:center;justify-content:center">
+    <div style="background:#fff;border-radius:8px;padding:32px;border:.5px solid #e0ddd5;width:100%;max-width:480px">
+
+        <div style="background:#fff3cd;border-radius:6px;padding:12px;margin-bottom:20px;border:1px solid #ffc107">
+            <p style="font-size:12px;color:#856404;margin:0">⚠️ Le mot de passe ne sera pas envoyé par email. Vous devrez le communiquer à l'employé en main propre.</p>
+        </div>
+
+        <form method="post">
+            <div class="mb-3">
+                <label style="font-size:12px;font-weight:700;color:var(--brun)">Prénom *</label>
+                <input type="text" name="prenom" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label style="font-size:12px;font-weight:700;color:var(--brun)">Nom *</label>
+                <input type="text" name="nom" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label style="font-size:12px;font-weight:700;color:var(--brun)">Email (identifiant) *</label>
+                <input type="email" name="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label style="font-size:12px;font-weight:700;color:var(--brun)">Mot de passe *</label>
+                <input type="password" name="password" class="form-control" required minlength="10">
+                <div style="font-size:11px;color:#6B6B5A;margin-top:4px">Min 10 caractères, majuscule, chiffre, caractère spécial</div>
+            </div>
+            <button type="submit" class="btn btn-brun w-100" style="font-size:15px;padding:12px">
+                Créer le compte
+            </button>
+        </form>
+    </div>
+</section>
+
+{% endblock %}
