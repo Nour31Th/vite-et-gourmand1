@@ -1,20 +1,64 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ContactController!{% endblock %}
+{% block title %}Contact — Vite & Gourmand{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/Users/miorathual/vite-et-gourmand1/src/Controller/ContactController.php</code></li>
-        <li>Your template at <code>/Users/miorathual/vite-et-gourmand1/templates/contact/index.html.twig</code></li>
-    </ul>
+<div style="background:var(--beige);padding:20px;text-align:center">
+    <h1 style="font-family:'Montserrat',sans-serif;font-size:36px;font-weight:700;color:var(--brun)">
+        Nous contacter
+    </h1>
 </div>
+
+<section style="padding:48px 80px;background:var(--bgclair)">
+    <div class="row g-4">
+
+        <div class="col-md-4">
+            <div style="background:#fff;border-radius:8px;padding:24px;border:.5px solid #e0ddd5">
+                <h2 style="font-family:'Poppins',sans-serif;font-size:17px;font-weight:600;color:var(--brun);margin-bottom:16px">Nos coordonnées</h2>
+                <div style="margin-bottom:12px">
+                    <div style="font-size:12px;font-weight:700;color:var(--brun);margin-bottom:2px">Email</div>
+                    <div style="font-size:13px;color:#4A4A3A">contact@viteetgourmand.fr</div>
+                </div>
+                <div style="margin-bottom:12px">
+                    <div style="font-size:12px;font-weight:700;color:var(--brun);margin-bottom:2px">Adresse</div>
+                    <div style="font-size:13px;color:#4A4A3A">Bordeaux, France</div>
+                </div>
+                <div>
+                    <div style="font-size:12px;font-weight:700;color:var(--brun);margin-bottom:8px">Horaires</div>
+                    <div style="font-size:12px;color:#4A4A3A;line-height:2">
+                        Lun–Mar : Fermé<br>
+                        Mer–Dim : 11h–15h / 18h–23h
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div style="background:#fff;border-radius:8px;padding:24px;border:.5px solid #e0ddd5">
+                <h2 style="font-family:'Poppins',sans-serif;font-size:17px;font-weight:600;color:var(--brun);margin-bottom:16px">Envoyer un message</h2>
+                <form method="post">
+                    <div class="mb-3">
+                        <label for="titre" style="font-size:12px;font-weight:700;color:var(--brun)">Sujet *</label>
+                        <input type="text" id="titre" name="titre" class="form-control" required placeholder="Ex: Question sur un menu">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" style="font-size:12px;font-weight:700;color:var(--brun)">Votre email *</label>
+                        <input type="email" id="email" name="email" class="form-control" required placeholder="votre@email.fr"
+                            value="{{ app.user ? app.user.email : '' }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" style="font-size:12px;font-weight:700;color:var(--brun)">Message *</label>
+                        <textarea id="description" name="description" class="form-control" rows="5" required placeholder="Votre message..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-vert" style="font-size:15px;padding:10px 24px">
+                        Envoyer le message
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</section>
+
 {% endblock %}
