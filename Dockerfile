@@ -1,4 +1,4 @@
-FROM php:8.3-cli
+FROM php:8.4-cli
 
 RUN apt-get update && apt-get install -y \
     git \
@@ -26,3 +26,4 @@ EXPOSE 8080
 CMD php bin/console cache:warmup --env=prod && \
     php bin/console doctrine:migrations:migrate --no-interaction --env=prod && \
     php -S 0.0.0.0:$PORT -t public/
+    
