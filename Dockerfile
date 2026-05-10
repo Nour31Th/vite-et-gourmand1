@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     libicu-dev \
     libxml2-dev \
+    libonig-dev \
     unzip \
     && docker-php-ext-install pdo pdo_pgsql intl mbstring xml \
     && apt-get clean
@@ -25,4 +26,3 @@ EXPOSE 8080
 CMD php bin/console cache:warmup --env=prod && \
     php bin/console doctrine:migrations:migrate --no-interaction --env=prod && \
     php -S 0.0.0.0:$PORT -t public/
-    
