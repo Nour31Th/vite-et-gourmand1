@@ -18,6 +18,8 @@ COPY . .
 
 RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader --no-scripts
 
+RUN touch .env
+
 ENV APP_ENV=prod
 ENV APP_DEBUG=0
 
