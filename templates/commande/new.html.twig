@@ -1,0 +1,184 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commander — Vite & Gourmand{% endblock %}
+
+{% block body %}
+
+<div style="background:var(--beige);padding:20px;text-align:center">
+    <h1 style="font-family:'Montserrat',sans-serif;font-size:36px;font-weight:700;color:var(--brun)">
+        Commander un menu
+    </h1>
+</div>
+
+<section style="padding:48px 80px;background:var(--bgclair)">
+<form method="post" action="{{ path('app_commande_new') }}" id="form-commande">
+
+    <div class="row g-4">
+
+        <div class="col-md-8">
+
+            <div style="background:#fff;border-radius:8px;padding:24px;margin-bottom:16px;border:.5px solid #e0ddd5">
+                <h2 style="font-family:'Poppins',sans-serif;font-size:17px;font-weight:600;color:var(--brun);margin-bottom:16px">Vos informations</h2>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label style="font-size:12px;font-weight:700;color:var(--brun)">Prénom</label>
+                        <input type="text" class="form-control" value="{{ user.prenom }}" readonly style="background:var(--bgclair)">
+                    </div>
+                    <div class="col-md-6">
+                        <label style="font-size:12px;font-weight:700;color:var(--brun)">Nom</label>
+                        <input type="text" class="form-control" value="{{ user.nom }}" readonly style="background:var(--bgclair)">
+                    </div>
+                    <div class="col-md-6">
+                        <label style="font-size:12px;font-weight:700;color:var(--brun)">Email</label>
+                        <input type="email" class="form-control" value="{{ user.email }}" readonly style="background:var(--bgclair)">
+                    </div>
+                    <div class="col-md-6">
+                        <label style="font-size:12px;font-weight:700;color:var(--brun)">GSM</label>
+                        <input type="text" class="form-control" value="{{ user.gsm }}" readonly style="background:var(--bgclair)">
+                    </div>
+                </div>
+            </div>
+
+            <div style="background:#fff;border-radius:8px;padding:24px;margin-bottom:16px;border:.5px solid #e0ddd5">
+                <h2 style="font-family:'Poppins',sans-serif;font-size:17px;font-weight:600;color:var(--brun);margin-bottom:16px">Informations de livraison</h2>
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label for="adresse_livraison" style="font-size:12px;font-weight:700;color:var(--brun)">Adresse de livraison *</label>
+                        <input type="text" id="adresse_livraison" name="adresse_livraison" class="form-control" required placeholder="12 rue de la Paix">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="ville_livraison" style="font-size:12px;font-weight:700;color:var(--brun)">Ville *</label>
+                        <input type="text" id="ville_livraison" name="ville_livraison" class="form-control" required placeholder="Bordeaux" oninput="calculerPrix()">
+                        <div style="font-family:'Lexend',sans-serif;font-size:11px;color:#6B6B5A;margin-top:4px">Livraison gratuite à Bordeaux · +5€ ailleurs</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="date_prestation" style="font-size:12px;font-weight:700;color:var(--brun)">Date de la prestation *</label>
+                        <input type="date" id="date_prestation" name="date_prestation" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="heure_livraison" style="font-size:12px;font-weight:700;color:var(--brun)">Heure souhaitée *</label>
+                        <input type="time" id="heure_livraison" name="heure_livraison" class="form-control" required>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background:#fff;border-radius:8px;padding:24px;margin-bottom:16px;border:.5px solid #e0ddd5">
+                <h2 style="font-family:'Poppins',sans-serif;font-size:17px;font-weight:600;color:var(--brun);margin-bottom:16px">Choix du menu</h2>
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label for="menu_id" style="font-size:12px;font-weight:700;color:var(--brun)">Menu *</label>
+                        <select id="menu_id" name="menu_id" class="form-select" required onchange="calculerPrix()">
+                            <option value="">Sélectionnez un menu</option>
+                            {% for m in menus %}
+                            <option value="{{ m.id }}"
+                                data-prix="{{ m.prix }}"
+                                data-min="{{ m.nbPersonnesMin }}"
+                                {% if menu and menu.id == m.id %}selected{% endif %}>
+                                {{ m.titre }} — {{ m.prix }}€ (min {{ m.nbPersonnesMin }} pers.)
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="nb_personnes" style="font-size:12px;font-weight:700;color:var(--brun)">Nombre de personnes *</label>
+                        <input type="number" id="nb_personnes" name="nb_personnes" class="form-control" required min="1" placeholder="10" oninput="calculerPrix()">
+                        <div id="msg-min" style="font-family:'Lexend',sans-serif;font-size:11px;color:#6B6B5A;margin-top:4px"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+            <div style="background:#fff;border-radius:8px;padding:24px;border:.5px solid #e0ddd5;position:sticky;top:80px">
+                <h2 style="font-family:'Poppins',sans-serif;font-size:15px;font-weight:600;color:var(--brun);margin-bottom:16px">Récapitulatif du prix</h2>
+
+                <div style="border-bottom:.5px solid #e0ddd5;padding-bottom:12px;margin-bottom:12px">
+                    <div class="d-flex justify-content-between" style="font-size:13px;color:#4A4A3A">
+                        <span>Prix menu</span>
+                        <span id="recap-prix-menu">—</span>
+                    </div>
+                </div>
+                <div style="border-bottom:.5px solid #e0ddd5;padding-bottom:12px;margin-bottom:12px">
+                    <div class="d-flex justify-content-between" style="font-size:13px;color:#4A4A3A">
+                        <span>Livraison</span>
+                        <span id="recap-livraison">—</span>
+                    </div>
+                </div>
+                <div id="recap-reduction" style="border-bottom:.5px solid #e0ddd5;padding-bottom:12px;margin-bottom:12px;display:none">
+                    <div class="d-flex justify-content-between" style="font-size:13px;color:var(--vert)">
+                        <span>Réduction 10%</span>
+                        <span id="recap-reduction-montant">—</span>
+                    </div>
+                </div>
+                <div style="margin-bottom:16px">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span style="font-family:'Poppins',sans-serif;font-size:15px;font-weight:600;color:var(--brun)">Total</span>
+                        <span id="recap-total" style="font-family:'Poppins',sans-serif;font-size:24px;font-weight:600;color:var(--terre)">—</span>
+                    </div>
+                </div>
+
+                <div id="msg-reduction" style="font-family:'Lexend',sans-serif;font-size:11px;color:var(--vert);margin-bottom:12px;display:none">
+                    ✓ Réduction de 10% appliquée !
+                </div>
+
+                <button type="submit" class="btn btn-terre w-100" style="font-size:15px;padding:12px">
+                    Confirmer la commande
+                </button>
+                <div style="font-family:'Lexend',sans-serif;font-size:11px;color:#6B6B5A;text-align:center;margin-top:8px">
+                    Vous recevrez un email de confirmation
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+</section>
+
+{% endblock %}
+
+{% block javascripts %}
+<script>
+function calculerPrix() {
+    const select = document.getElementById('menu_id');
+    const option = select.options[select.selectedIndex];
+    const nbPersonnes = parseInt(document.getElementById('nb_personnes').value) || 0;
+    const ville = document.getElementById('ville_livraison').value.toLowerCase().trim();
+
+    if (!option.value) return;
+
+    const prixBase = parseFloat(option.dataset.prix);
+    const minPersonnes = parseInt(option.dataset.min);
+
+    document.getElementById('msg-min').textContent = 'Minimum : ' + minPersonnes + ' personnes';
+
+    const prixParPersonne = prixBase / minPersonnes;
+    let prixMenu = prixParPersonne * nbPersonnes;
+    let reduction = 0;
+
+    if (nbPersonnes >= minPersonnes + 5) {
+        reduction = prixMenu * 0.10;
+        prixMenu = prixMenu * 0.90;
+        document.getElementById('recap-reduction').style.display = 'block';
+        document.getElementById('msg-reduction').style.display = 'block';
+        document.getElementById('recap-reduction-montant').textContent = '-' + reduction.toFixed(2) + ' €';
+    } else {
+        document.getElementById('recap-reduction').style.display = 'none';
+        document.getElementById('msg-reduction').style.display = 'none';
+    }
+
+    let livraison = 0;
+    if (ville && ville !== 'bordeaux') {
+        livraison = 5.00;
+    }
+
+    const total = prixMenu + livraison;
+
+    document.getElementById('recap-prix-menu').textContent = prixMenu.toFixed(2) + ' €';
+    document.getElementById('recap-livraison').textContent = livraison === 0 ? 'Gratuite' : livraison.toFixed(2) + ' €';
+    document.getElementById('recap-total').textContent = total.toFixed(2) + ' €';
+}
+
+window.addEventListener('load', calculerPrix);
+</script>
+{% endblock %}

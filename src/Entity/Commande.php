@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CommandeRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Commande
 {
     #[ORM\Id]
@@ -288,4 +289,17 @@ class Commande
 
         return $this;
     }
+#[ORM\PrePersist]
+public function generateNumeroCommande(): void
+{
+    if (!$this->numero_commande) {
+        $this->numero_commande = 'CMD-' . strtoupper(uniqid());
+    }
+    if (!$this->date_commande) {
+        $this->date_commande = new \DateTime();
+    }
+    if ($this->statut === null) {
+        $this->statut = 'en_attente';
+    }
 }
+    }

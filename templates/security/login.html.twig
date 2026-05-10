@@ -1,34 +1,72 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Connexion — Vite & Gourmand{% endblock %}
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
 
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ logout_path() }}">Logout</a>
+<div style="background:var(--beige);padding:20px;text-align:center">
+    <h1 style="font-family:'Montserrat',sans-serif;font-size:36px;font-weight:700;color:var(--brun)">
+        Connexion
+    </h1>
+</div>
+
+<section style="padding:48px 80px;background:var(--bgclair);min-height:60vh;display:flex;align-items:center;justify-content:center">
+    <div style="background:#fff;border-radius:8px;padding:32px;border:.5px solid #e0ddd5;width:100%;max-width:440px">
+
+        {% if error %}
+        <div class="alert alert-danger" role="alert">
+            {{ error.messageKey|trans(error.messageData, 'security') }}
         </div>
-    {% endif %}
+        {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-    <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+        <h2 style="font-family:'Poppins',sans-serif;font-size:20px;font-weight:600;color:var(--brun);margin-bottom:24px;text-align:center">
+            Se connecter
+        </h2>
 
-    <div class="checkbox mb-3">
-        <label>
-            <input type="checkbox" name="_remember_me"> Remember me
-        </label>
+        <form method="post">
+            <div class="mb-3">
+                <label for="inputEmail" style="font-size:12px;font-weight:700;color:var(--brun)">Adresse email</label>
+                <input type="email" value="{{ last_username }}" name="email" id="inputEmail"
+                    class="form-control" autocomplete="email" required autofocus
+                    placeholder="votre@email.fr">
+            </div>
+
+            <div class="mb-3">
+                <label for="inputPassword" style="font-size:12px;font-weight:700;color:var(--brun)">Mot de passe</label>
+                <input type="password" name="password" id="inputPassword"
+                    class="form-control" autocomplete="current-password" required
+                    placeholder="••••••••••">
+            </div>
+
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" name="_remember_me" id="remember_me">
+                <label class="form-check-label" for="remember_me" style="font-size:13px;color:#4A4A3A">
+                    Se souvenir de moi
+                </label>
+            </div>
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <button type="submit" class="btn btn-vert w-100 mb-3" style="font-size:15px;padding:12px">
+                Se connecter
+            </button>
+
+            <div class="text-center">
+              <a href="#" style="font-size:13px;color:var(--vert)">
+    Mot de passe oublié ?
+</a>
+            </div>
+
+            <hr style="border-color:#e0ddd5;margin:20px 0">
+
+            <div class="text-center">
+                <p style="font-size:13px;color:#6B6B5A;margin-bottom:8px">Pas encore de compte ?</p>
+                <a href="{{ path('app_register') }}" class="btn btn-outline-secondary w-100" style="font-size:13px">
+                    Créer un compte
+                </a>
+            </div>
+        </form>
     </div>
+</section>
 
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
 {% endblock %}
