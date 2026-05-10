@@ -1,0 +1,178 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ menu.titre }} — Vite & Gourmand{% endblock %}
+
+{% block body %}
+
+<div style="background:var(--beige);padding:20px;text-align:center">
+    <h1 style="font-family:'Montserrat',sans-serif;font-size:36px;font-weight:700;color:var(--brun)">
+        {{ menu.titre }}
+    </h1>
+    <div class="d-flex justify-content-center gap-2 mt-2">
+        {% if menu.theme %}
+        <span style="background:var(--brun);color:#fff;font-family:'Lexend',sans-serif;font-size:11px;padding:3px 10px;border-radius:10px">{{ menu.theme }}</span>
+        {% endif %}
+        {% if menu.regime %}
+        <span style="background:var(--vert);color:#fff;font-family:'Lexend',sans-serif;font-size:11px;padding:3px 10px;border-radius:10px">{{ menu.regime }}</span>
+        {% endif %}
+    </div>
+</div>
+
+<section style="padding:48px 80px;background:var(--bgclair)">
+    <a href="{{ path('app_menu_index') }}" style="font-size:13px;color:var(--vert);font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:4px;margin-bottom:24px">
+        ← Retour aux menus
+    </a>
+
+    <div class="row g-4">
+
+        {# COLONNE GAUCHE #}
+        <div class="col-md-8">
+
+            {# GALERIE #}
+            <div style="background:var(--vert);height:280px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:24px">
+                <span style="color:#fff;font-family:'Lexend',sans-serif;font-size:13px;opacity:.8">Galerie photos du menu</span>
+            </div>
+
+            {# DESCRIPTION #}
+            <div style="background:#fff;border-radius:8px;padding:24px;margin-bottom:16px;border:.5px solid #e0ddd5">
+                <h2 style="font-family:'Poppins',sans-serif;font-size:17px;font-weight:600;color:var(--brun);margin-bottom:12px">Description</h2>
+                <p style="font-size:14px;color:#4A4A3A;line-height:1.7">{{ menu.description }}</p>
+            </div>
+
+            {# CONDITIONS — bien en évidence comme requis ECF #}
+            {% if menu.conditions %}
+            <div style="background:#fff3cd;border-radius:8px;padding:20px;margin-bottom:16px;border:1.5px solid #ffc107" role="alert">
+                <h2 style="font-family:'Poppins',sans-serif;font-size:15px;font-weight:600;color:#856404;margin-bottom:8px">
+                    ⚠️ Conditions importantes à lire avant de commander
+                </h2>
+                <p style="font-size:13px;color:#856404;line-height:1.7;margin:0">{{ menu.conditions }}</p>
+            </div>
+            {% endif %}
+
+            {# PLATS #}
+            {% if menu.plats|length > 0 %}
+            <div style="background:#fff;border-radius:8px;padding:24px;border:.5px solid #e0ddd5">
+                <h2 style="font-family:'Poppins',sans-serif;font-size:17px;font-weight:600;color:var(--brun);margin-bottom:16px">Composition du menu</h2>
+
+                {% set entrees = menu.plats|filter(p => p.type == 'entree') %}
+                {% set plats = menu.plats|filter(p => p.type == 'plat') %}
+                {% set desserts = menu.plats|filter(p => p.type == 'dessert') %}
+
+                {% if entrees|length > 0 %}
+                <div style="margin-bottom:16px">
+                    <h3 style="font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;color:var(--vert);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Entrées</h3>
+                    {% for plat in entrees %}
+                    <div style="padding:8px 0;border-bottom:.5px solid #f0ede8">
+                        <div style="font-size:14px;font-weight:700;color:var(--brun)">{{ plat.nom }}</div>
+                        {% if plat.description %}<div style="font-size:12px;color:#6B6B5A">{{ plat.description }}</div>{% endif %}
+                        {% if plat.allergenes|length > 0 %}
+                        <div style="margin-top:4px">
+                            {% for allergene in plat.allergenes %}
+                            <span style="background:#fee2e2;color:#991b1b;font-size:10px;padding:1px 6px;border-radius:4px;margin-right:4px">{{ allergene.nom }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if plats|length > 0 %}
+                <div style="margin-bottom:16px">
+                    <h3 style="font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;color:var(--vert);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Plats</h3>
+                    {% for plat in plats %}
+                    <div style="padding:8px 0;border-bottom:.5px solid #f0ede8">
+                        <div style="font-size:14px;font-weight:700;color:var(--brun)">{{ plat.nom }}</div>
+                        {% if plat.description %}<div style="font-size:12px;color:#6B6B5A">{{ plat.description }}</div>{% endif %}
+                        {% if plat.allergenes|length > 0 %}
+                        <div style="margin-top:4px">
+                            {% for allergene in plat.allergenes %}
+                            <span style="background:#fee2e2;color:#991b1b;font-size:10px;padding:1px 6px;border-radius:4px;margin-right:4px">{{ allergene.nom }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if desserts|length > 0 %}
+                <div>
+                    <h3 style="font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;color:var(--vert);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Desserts</h3>
+                    {% for plat in desserts %}
+                    <div style="padding:8px 0;border-bottom:.5px solid #f0ede8">
+                        <div style="font-size:14px;font-weight:700;color:var(--brun)">{{ plat.nom }}</div>
+                        {% if plat.description %}<div style="font-size:12px;color:#6B6B5A">{{ plat.description }}</div>{% endif %}
+                        {% if plat.allergenes|length > 0 %}
+                        <div style="margin-top:4px">
+                            {% for allergene in plat.allergenes %}
+                            <span style="background:#fee2e2;color:#991b1b;font-size:10px;padding:1px 6px;border-radius:4px;margin-right:4px">{{ allergene.nom }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+            </div>
+            {% endif %}
+
+        </div>
+
+        {# COLONNE DROITE — PRIX ET COMMANDE #}
+        <div class="col-md-4">
+            <div style="background:#fff;border-radius:8px;padding:24px;border:.5px solid #e0ddd5;position:sticky;top:80px">
+                <h2 style="font-family:'Poppins',sans-serif;font-size:15px;font-weight:600;color:var(--brun);margin-bottom:16px">Récapitulatif</h2>
+
+                <div style="border-bottom:.5px solid #e0ddd5;padding-bottom:12px;margin-bottom:12px">
+                    <div style="font-family:'Lexend',sans-serif;font-size:11px;color:#6B6B5A;margin-bottom:4px">Nombre de personnes minimum</div>
+                    <div style="font-size:16px;font-weight:700;color:var(--brun)">{{ menu.nbPersonnesMin }} personnes</div>
+                </div>
+
+                <div style="border-bottom:.5px solid #e0ddd5;padding-bottom:12px;margin-bottom:12px">
+                    <div style="font-family:'Lexend',sans-serif;font-size:11px;color:#6B6B5A;margin-bottom:4px">Prix pour {{ menu.nbPersonnesMin }} personnes</div>
+                    <div style="font-family:'Poppins',sans-serif;font-size:28px;font-weight:600;color:var(--terre)">{{ menu.prix }} €</div>
+                    <div style="font-family:'Lexend',sans-serif;font-size:11px;color:#6B6B5A">soit {{ (menu.prix / menu.nbPersonnesMin)|number_format(2) }} €/pers.</div>
+                </div>
+
+                {% if menu.stock > 0 %}
+                <div style="font-family:'Lexend',sans-serif;font-size:12px;color:var(--vert);margin-bottom:16px">
+                    ✓ {{ menu.stock }} commande(s) encore disponible(s)
+                </div>
+                {% else %}
+                <div style="font-family:'Lexend',sans-serif;font-size:12px;color:#dc2626;margin-bottom:16px">
+                    ✗ Plus de stock disponible
+                </div>
+                {% endif %}
+
+                {% if app.user %}
+                    {% if menu.stock > 0 %}
+                    <a href="#" class="btn btn-terre w-100" style="font-size:15px;padding:12px">
+                        Commander ce menu
+                    </a>
+                    {% else %}
+                    <button class="btn w-100 disabled" style="font-size:15px;padding:12px;background:#e0ddd5;color:#9A9A7A">
+                        Stock épuisé
+                    </button>
+                    {% endif %}
+                {% else %}
+                <div style="background:var(--bgclair);border-radius:6px;padding:12px;text-align:center;margin-bottom:12px">
+                    <p style="font-size:13px;color:var(--brun);margin-bottom:8px">Connectez-vous pour commander</p>
+                    <div class="d-flex gap-2">
+                        <a href="{{ path('app_login') }}" class="btn btn-vert btn-sm flex-1 w-50" style="font-size:13px">Connexion</a>
+                        <a href="{{ path('app_register') }}" class="btn btn-outline-secondary btn-sm w-50" style="font-size:13px">Inscription</a>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div style="font-family:'Lexend',sans-serif;font-size:11px;color:#6B6B5A;text-align:center;margin-top:8px">
+                    Réduction de 10% pour {{ menu.nbPersonnesMin + 5 }} personnes ou plus
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,176 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nos menus — Vite & Gourmand{% endblock %}
+
+{% block body %}
+
+<div style="background:var(--beige);padding:20px;text-align:center">
+    <h1 style="font-family:'Montserrat',sans-serif;font-size:36px;font-weight:700;color:var(--brun)">
+        Nos menus
+    </h1>
+</div>
+
+<section style="padding:48px 80px;background:var(--bgclair)">
+
+    {# FILTRES #}
+    <div style="background:#fff;border-radius:8px;padding:24px;margin-bottom:32px;border:.5px solid #e0ddd5">
+        <p style="font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--brun);margin-bottom:16px">Filtrer les menus</p>
+        <div class="row g-3">
+            <div class="col-md-2">
+                <label for="filtre-prix-min" style="font-size:12px;font-weight:700;color:var(--brun)">Prix min (€)</label>
+                <input type="number" id="filtre-prix-min" class="form-control form-control-sm" placeholder="0" min="0">
+            </div>
+            <div class="col-md-2">
+                <label for="filtre-prix-max" style="font-size:12px;font-weight:700;color:var(--brun)">Prix max (€)</label>
+                <input type="number" id="filtre-prix-max" class="form-control form-control-sm" placeholder="1000" min="0">
+            </div>
+            <div class="col-md-2">
+                <label for="filtre-theme" style="font-size:12px;font-weight:700;color:var(--brun)">Thème</label>
+                <select id="filtre-theme" class="form-select form-select-sm">
+                    <option value="">Tous</option>
+                    <option value="classique">Classique</option>
+                    <option value="evenement">Événement</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label for="filtre-regime" style="font-size:12px;font-weight:700;color:var(--brun)">Régime</label>
+                <select id="filtre-regime" class="form-select form-select-sm">
+                    <option value="">Tous</option>
+                    <option value="classique">Classique</option>
+                    <option value="vegetarien">Végétarien</option>
+                    <option value="vegan">Vegan</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label for="filtre-personnes" style="font-size:12px;font-weight:700;color:var(--brun)">Nb personnes min</label>
+                <input type="number" id="filtre-personnes" class="form-control form-control-sm" placeholder="1" min="1">
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button id="btn-reset" class="btn btn-outline-secondary btn-sm w-100" style="min-height:31px">
+                    Réinitialiser
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {# LISTE MENUS #}
+    <div id="liste-menus" class="row g-4">
+        {% for menu in menus %}
+        <div class="col-md-4 menu-card">
+            <article style="background:#fff;border-radius:8px;border:.5px solid #e0ddd5;overflow:hidden;height:100%">
+                <div style="background:var(--vert);height:120px;display:flex;align-items:center;justify-content:center">
+                    <span style="color:#fff;font-family:'Lexend',sans-serif;font-size:12px;opacity:.8">Photo du menu</span>
+                </div>
+                <div style="padding:16px">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h2 style="font-family:'Poppins',sans-serif;font-size:17px;font-weight:600;color:var(--brun)">{{ menu.titre }}</h2>
+                        {% if menu.theme %}
+                        <span style="background:var(--beige);color:var(--brun);font-family:'Lexend',sans-serif;font-size:10px;padding:2px 8px;border-radius:10px">{{ menu.theme }}</span>
+                        {% endif %}
+                    </div>
+                    {% if menu.regime %}
+                    <span style="background:var(--bgclair);color:var(--grisl);font-family:'Lexend',sans-serif;font-size:10px;padding:2px 8px;border-radius:10px;display:inline-block;margin-bottom:8px">{{ menu.regime }}</span>
+                    {% endif %}
+                    <p style="font-size:13px;color:#4A4A3A;line-height:1.6;margin-bottom:12px">{{ menu.description|slice(0, 120) }}{% if menu.description|length > 120 %}...{% endif %}</p>
+                    <div class="d-flex justify-content-between align-items-center" style="border-top:.5px solid #e0ddd5;padding-top:12px">
+                        <div>
+                            <div style="font-family:'Lexend',sans-serif;font-size:11px;color:#6B6B5A">À partir de {{ menu.nbPersonnesMin }} pers.</div>
+                            <div style="font-family:'Poppins',sans-serif;font-size:18px;font-weight:600;color:var(--terre)">{{ menu.prix }} €</div>
+                        </div>
+                        <a href="{{ path('app_menu_show', {id: menu.id}) }}" class="btn btn-vert btn-sm px-3" style="font-size:13px">
+                            Voir le menu
+                        </a>
+                    </div>
+                </div>
+            </article>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <p style="color:#6B6B5A;font-size:14px;text-align:center">Aucun menu disponible pour le moment.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div id="no-results" style="display:none;text-align:center;padding:40px 0">
+        <p style="color:#6B6B5A;font-size:14px">Aucun menu ne correspond à vos critères.</p>
+        <button id="btn-reset2" class="btn btn-outline-secondary btn-sm mt-2">Réinitialiser les filtres</button>
+    </div>
+
+</section>
+
+{% endblock %}
+
+{% block javascripts %}
+<script>
+const filtres = {
+    'filtre-prix-min': 'prix_min',
+    'filtre-prix-max': 'prix_max',
+    'filtre-theme':    'theme',
+    'filtre-regime':   'regime',
+    'filtre-personnes':'nb_personnes'
+};
+
+function appliquerFiltres() {
+    const params = new URLSearchParams();
+    Object.entries(filtres).forEach(([id, param]) => {
+        const val = document.getElementById(id).value;
+        if (val) params.append(param, val);
+    });
+
+    fetch('/menus/filter?' + params.toString())
+        .then(r => r.json())
+        .then(menus => {
+            const liste = document.getElementById('liste-menus');
+            const noResults = document.getElementById('no-results');
+
+            if (menus.length === 0) {
+                liste.innerHTML = '';
+                noResults.style.display = 'block';
+                return;
+            }
+
+            noResults.style.display = 'none';
+            liste.innerHTML = menus.map(menu => `
+                <div class="col-md-4 menu-card">
+                    <article style="background:#fff;border-radius:8px;border:.5px solid #e0ddd5;overflow:hidden;height:100%">
+                        <div style="background:var(--vert);height:120px;display:flex;align-items:center;justify-content:center">
+                            <span style="color:#fff;font-family:'Lexend',sans-serif;font-size:12px;opacity:.8">Photo du menu</span>
+                        </div>
+                        <div style="padding:16px">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h2 style="font-family:'Poppins',sans-serif;font-size:17px;font-weight:600;color:var(--brun)">${menu.titre}</h2>
+                                ${menu.theme ? `<span style="background:var(--beige);color:var(--brun);font-family:'Lexend',sans-serif;font-size:10px;padding:2px 8px;border-radius:10px">${menu.theme}</span>` : ''}
+                            </div>
+                            ${menu.regime ? `<span style="background:var(--bgclair);color:#4A4A3A;font-family:'Lexend',sans-serif;font-size:10px;padding:2px 8px;border-radius:10px;display:inline-block;margin-bottom:8px">${menu.regime}</span>` : ''}
+                            <p style="font-size:13px;color:#4A4A3A;line-height:1.6;margin-bottom:12px">${menu.description ? menu.description.slice(0, 120) + (menu.description.length > 120 ? '...' : '') : ''}</p>
+                            <div class="d-flex justify-content-between align-items-center" style="border-top:.5px solid #e0ddd5;padding-top:12px">
+                                <div>
+                                    <div style="font-family:'Lexend',sans-serif;font-size:11px;color:#6B6B5A">À partir de ${menu.nb_personnes_min} pers.</div>
+                                    <div style="font-family:'Poppins',sans-serif;font-size:18px;font-weight:600;color:var(--terre)">${menu.prix} €</div>
+                                </div>
+                                <a href="/menus/${menu.id}" class="btn btn-vert btn-sm px-3" style="font-size:13px">Voir le menu</a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            `).join('');
+        });
+}
+
+Object.keys(filtres).forEach(id => {
+    document.getElementById(id).addEventListener('input', appliquerFiltres);
+    document.getElementById(id).addEventListener('change', appliquerFiltres);
+});
+
+function resetFiltres() {
+    Object.keys(filtres).forEach(id => {
+        const el = document.getElementById(id);
+        el.value = '';
+    });
+    appliquerFiltres();
+}
+
+document.getElementById('btn-reset').addEventListener('click', resetFiltres);
+document.getElementById('btn-reset2').addEventListener('click', resetFiltres);
+</script>
+{% endblock %}

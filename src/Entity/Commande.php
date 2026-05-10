@@ -1,0 +1,291 @@
+<?php
+
+namespace App\Entity;
+
+use App\Repository\CommandeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity(repositoryClass: CommandeRepository::class)]
+class Commande
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $numero_commande = null;
+
+    #[ORM\Column]
+    private ?\DateTime $date_commande = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTime $date_prestation = null;
+
+    #[ORM\Column(type: Types::TIME_MUTABLE)]
+    private ?\DateTime $heure_livraison = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $adresse_livraison = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $ville_livraison = null;
+
+    #[ORM\Column]
+    private ?int $nb_personnes = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    private ?string $prix_menu = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    private ?string $prix_livraison = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    private ?string $prix_total = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $statut = null;
+
+    #[ORM\Column]
+    private ?bool $pret_materiel = null;
+
+    #[ORM\Column]
+    private ?bool $materiel_restitue = null;
+
+    #[ORM\ManyToOne(inversedBy: 'commandes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $utilisateur = null;
+
+    #[ORM\ManyToOne(inversedBy: 'commandes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Menu $menu = null;
+
+    /**
+     * @var Collection<int, HistoriqueStatut>
+     */
+    #[ORM\OneToMany(targetEntity: HistoriqueStatut::class, mappedBy: 'commande', orphanRemoval: true)]
+    private Collection $historiqueStatuts;
+
+    public function __construct()
+    {
+        $this->historiqueStatuts = new ArrayCollection();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getNumeroCommande(): ?string
+    {
+        return $this->numero_commande;
+    }
+
+    public function setNumeroCommande(string $numero_commande): static
+    {
+        $this->numero_commande = $numero_commande;
+
+        return $this;
+    }
+
+    public function getDateCommande(): ?\DateTime
+    {
+        return $this->date_commande;
+    }
+
+    public function setDateCommande(\DateTime $date_commande): static
+    {
+        $this->date_commande = $date_commande;
+
+        return $this;
+    }
+
+    public function getDatePrestation(): ?\DateTime
+    {
+        return $this->date_prestation;
+    }
+
+    public function setDatePrestation(\DateTime $date_prestation): static
+    {
+        $this->date_prestation = $date_prestation;
+
+        return $this;
+    }
+
+    public function getHeureLivraison(): ?\DateTime
+    {
+        return $this->heure_livraison;
+    }
+
+    public function setHeureLivraison(\DateTime $heure_livraison): static
+    {
+        $this->heure_livraison = $heure_livraison;
+
+        return $this;
+    }
+
+    public function getAdresseLivraison(): ?string
+    {
+        return $this->adresse_livraison;
+    }
+
+    public function setAdresseLivraison(string $adresse_livraison): static
+    {
+        $this->adresse_livraison = $adresse_livraison;
+
+        return $this;
+    }
+
+    public function getVilleLivraison(): ?string
+    {
+        return $this->ville_livraison;
+    }
+
+    public function setVilleLivraison(string $ville_livraison): static
+    {
+        $this->ville_livraison = $ville_livraison;
+
+        return $this;
+    }
+
+    public function getNbPersonnes(): ?int
+    {
+        return $this->nb_personnes;
+    }
+
+    public function setNbPersonnes(int $nb_personnes): static
+    {
+        $this->nb_personnes = $nb_personnes;
+
+        return $this;
+    }
+
+    public function getPrixMenu(): ?string
+    {
+        return $this->prix_menu;
+    }
+
+    public function setPrixMenu(string $prix_menu): static
+    {
+        $this->prix_menu = $prix_menu;
+
+        return $this;
+    }
+
+    public function getPrixLivraison(): ?string
+    {
+        return $this->prix_livraison;
+    }
+
+    public function setPrixLivraison(string $prix_livraison): static
+    {
+        $this->prix_livraison = $prix_livraison;
+
+        return $this;
+    }
+
+    public function getPrixTotal(): ?string
+    {
+        return $this->prix_total;
+    }
+
+    public function setPrixTotal(string $prix_total): static
+    {
+        $this->prix_total = $prix_total;
+
+        return $this;
+    }
+
+    public function getStatut(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(string $statut): static
+    {
+        $this->statut = $statut;
+
+        return $this;
+    }
+
+    public function isPretMateriel(): ?bool
+    {
+        return $this->pret_materiel;
+    }
+
+    public function setPretMateriel(bool $pret_materiel): static
+    {
+        $this->pret_materiel = $pret_materiel;
+
+        return $this;
+    }
+
+    public function isMaterielRestitue(): ?bool
+    {
+        return $this->materiel_restitue;
+    }
+
+    public function setMaterielRestitue(bool $materiel_restitue): static
+    {
+        $this->materiel_restitue = $materiel_restitue;
+
+        return $this;
+    }
+
+    public function getUtilisateur(): ?User
+    {
+        return $this->utilisateur;
+    }
+
+    public function setUtilisateur(?User $utilisateur): static
+    {
+        $this->utilisateur = $utilisateur;
+
+        return $this;
+    }
+
+    public function getMenu(): ?Menu
+    {
+        return $this->menu;
+    }
+
+    public function setMenu(?Menu $menu): static
+    {
+        $this->menu = $menu;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, HistoriqueStatut>
+     */
+    public function getHistoriqueStatuts(): Collection
+    {
+        return $this->historiqueStatuts;
+    }
+
+    public function addHistoriqueStatut(HistoriqueStatut $historiqueStatut): static
+    {
+        if (!$this->historiqueStatuts->contains($historiqueStatut)) {
+            $this->historiqueStatuts->add($historiqueStatut);
+            $historiqueStatut->setCommande($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHistoriqueStatut(HistoriqueStatut $historiqueStatut): static
+    {
+        if ($this->historiqueStatuts->removeElement($historiqueStatut)) {
+            // set the owning side to null (unless already changed)
+            if ($historiqueStatut->getCommande() === $this) {
+                $historiqueStatut->setCommande(null);
+            }
+        }
+
+        return $this;
+    }
+}
