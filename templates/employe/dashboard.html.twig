@@ -1,0 +1,147 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Espace employé — Vite & Gourmand{% endblock %}
+
+{% block body %}
+
+<div style="background:var(--vert);padding:20px;text-align:center">
+    <h1 style="font-family:'Montserrat',sans-serif;font-size:30px;font-weight:700;color:#fff">
+        Espace Employé
+    </h1>
+</div>
+
+<section style="padding:32px 80px;background:var(--bgclair)">
+
+    {# NAVIGATION EMPLOYE #}
+    <div class="d-flex gap-2 mb-4">
+        <a href="{{ path('app_employe_dashboard') }}" class="btn btn-vert btn-sm">Commandes</a>
+        <a href="{{ path('app_employe_avis') }}" class="btn btn-outline-secondary btn-sm">Avis à valider</a>
+    </div>
+
+    {# FILTRES #}
+    <div style="background:#fff;border-radius:8px;padding:16px;margin-bottom:24px;border:.5px solid #e0ddd5">
+        <div class="row g-2 align-items-end">
+            <div class="col-md-3">
+                <label style="font-size:12px;font-weight:700;color:var(--brun)">Filtrer par statut</label>
+                <select id="filtre-statut" class="form-select form-select-sm" onchange="filtrerCommandes()">
+                    <option value="">Tous les statuts</option>
+                    <option value="en_attente">En attente</option>
+                    <option value="accepte">Accepté</option>
+                    <option value="en_preparation">En préparation</option>
+                    <option value="en_cours_livraison">En cours de livraison</option>
+                    <option value="livre">Livré</option>
+                    <option value="en_attente_materiel">En attente matériel</option>
+                    <option value="terminee">Terminée</option>
+                    <option value="annulee">Annulée</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label style="font-size:12px;font-weight:700;color:var(--brun)">Rechercher un client</label>
+                <input type="text" id="filtre-client" class="form-control form-control-sm" placeholder="Nom du client" oninput="filtrerCommandes()">
+            </div>
+        </div>
+    </div>
+
+    {# LISTE COMMANDES #}
+    <div id="liste-commandes">
+        {% for commande in commandes %}
+        <div class="commande-item" 
+             data-statut="{{ commande.statut }}"
+             data-client="{{ commande.utilisateur.nom|lower }} {{ commande.utilisateur.prenom|lower }}"
+             style="background:#fff;border-radius:8px;padding:20px;margin-bottom:12px;border:.5px solid #e0ddd5">
+
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <div style="font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;color:var(--brun)">
+                        {{ commande.utilisateur.prenom }} {{ commande.utilisateur.nom }}
+                    </div>
+                    <div style="font-family:'Lexend',sans-serif;font-size:11px;color:#6B6B5A">
+                        {{ commande.utilisateur.email }} · {{ commande.utilisateur.gsm }}
+                    </div>
+                    <div style="font-size:12px;color:#4A4A3A;margin-top:4px">
+                        <strong>{{ commande.menu.titre }}</strong> — {{ commande.nbPersonnes }} pers.
+                    </div>
+                    <div style="font-family:'Lexend',sans-serif;font-size:11px;color:#6B6B5A">
+                        Prestation : {{ commande.datePrestation|date('d/m/Y') }} à {{ commande.heureLivraison|date('H:i') }}
+                    </div>
+                    <div style="font-family:'Lexend',sans-serif;font-size:11px;color:#6B6B5A">
+                        {{ commande.adresseLivraison }}, {{ commande.villeLivraison }}
+                    </div>
+                </div>
+
+                <div class="col-md-2 text-center">
+                    <div style="font-family:'Poppins',sans-serif;font-size:16px;font-weight:600;color:var(--terre)">
+                        {{ commande.prixTotal }} €
+                    </div>
+                    <div style="font-family:'Lexend',sans-serif;font-size:10px;color:#6B6B5A">
+                        N° {{ commande.numeroCommande }}
+                    </div>
+                </div>
+
+                <div class="col-md-2 text-center">
+                    {% set couleurs = {
+                        'en_attente': '#f59e0b',
+                        'accepte': '#3b82f6',
+                        'en_preparation': '#8b5cf6',
+                        'en_cours_livraison': '#ec4899',
+                        'livre': '#10b981',
+                        'en_attente_materiel': '#f97316',
+                        'terminee': '#5C7A5C',
+                        'annulee': '#ef4444'
+                    } %}
+                    <span style="background:{{ couleurs[commande.statut] ?? '#6B6B5A' }};color:#fff;font-family:'Lexend',sans-serif;font-size:10px;padding:4px 10px;border-radius:10px">
+                        {{ commande.statut|replace({'_': ' '})|capitalize }}
+                    </span>
+                </div>
+
+                <div class="col-md-4">
+                    {% if commande.statut != 'terminee' and commande.statut != 'annulee' %}
+                    <form method="post" action="{{ path('app_employe_update_statut', {id: commande.id}) }}">
+                        <select name="statut" class="form-select form-select-sm mb-2">
+                            <option value="accepte" {% if commande.statut == 'accepte' %}selected{% endif %}>Accepté</option>
+                            <option value="en_preparation" {% if commande.statut == 'en_preparation' %}selected{% endif %}>En préparation</option>
+                            <option value="en_cours_livraison" {% if commande.statut == 'en_cours_livraison' %}selected{% endif %}>En cours de livraison</option>
+                            <option value="livre" {% if commande.statut == 'livre' %}selected{% endif %}>Livré</option>
+                            <option value="en_attente_materiel" {% if commande.statut == 'en_attente_materiel' %}selected{% endif %}>En attente matériel</option>
+                            <option value="terminee">Terminée</option>
+                            <option value="annulee">Annulée</option>
+                        </select>
+                        <input type="text" name="commentaire" class="form-control form-control-sm mb-2" placeholder="Commentaire / motif">
+                        <select name="mode_contact" class="form-select form-select-sm mb-2">
+                            <option value="">Mode de contact (si annulation)</option>
+                            <option value="appel">Appel GSM</option>
+                            <option value="email">Email</option>
+                        </select>
+                        <button type="submit" class="btn btn-vert btn-sm w-100" style="font-size:12px">
+                            Mettre à jour
+                        </button>
+                    </form>
+                    {% else %}
+                    <span style="font-size:12px;color:#6B6B5A">Commande terminée</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <p style="color:#6B6B5A;text-align:center">Aucune commande pour le moment.</p>
+        {% endfor %}
+    </div>
+
+</section>
+
+{% endblock %}
+
+{% block javascripts %}
+<script>
+function filtrerCommandes() {
+    const statut = document.getElementById('filtre-statut').value;
+    const client = document.getElementById('filtre-client').value.toLowerCase();
+
+    document.querySelectorAll('.commande-item').forEach(item => {
+        const matchStatut = !statut || item.dataset.statut === statut;
+        const matchClient = !client || item.dataset.client.includes(client);
+        item.style.display = matchStatut && matchClient ? 'block' : 'none';
+    });
+}
+</script>
+{% endblock %}
