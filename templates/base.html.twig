@@ -10,7 +10,6 @@
     <style>
         :root { --beige:#C4A882; --terre:#C4693A; --vert:#5C7A5C; --brun:#2C2B1A; --bgclair:#F5F2EC; }
         body { font-family:'Lato',sans-serif; color:#1A1A1A; }
-        .navbar-brand { font-family:'Montserrat',sans-serif; font-weight:700; color:var(--brun) !important; }
         .nav-link { font-family:'Lato',sans-serif; color:var(--brun) !important; }
         .nav-link.active { color:var(--vert) !important; font-weight:700; border-bottom:2px solid var(--vert); }
         .btn-vert { background:var(--vert); color:#fff; font-family:'Roboto',sans-serif; font-weight:700; min-height:44px; border:none; }
@@ -21,40 +20,10 @@
         footer a { color:#9A9A7A; text-decoration:none; }
         footer a:hover { color:var(--beige); }
         @media (max-width: 992px) {
-    #navMenu {
-        background: white;
-        padding: 16px;
-        border-top: 1px solid #e0ddd5;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    #navMenu .navbar-nav {
-        gap: 0 !important;
-    }
-    #navMenu .nav-link {
-        padding: 10px 0;
-        border-bottom: 1px solid #f0ede8;
-    }
-    #navMenu .d-flex {
-        margin-top: 12px;
-        padding-top: 12px;
-        border-top: 1px solid #e0ddd5;
-    }
-}
-@media (max-width: 992px) {
-    #navMenu {
-        background: white;
-        padding: 16px;
-        border-top: 1px solid #e0ddd5;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    #navMenu .nav-link {
-        padding: 10px 0;
-        border-bottom: 1px solid #f0ede8;
-    }
-    .navbar > .container-xl {
-        flex-wrap: wrap;
-    }
-}
+            #navMenu { background:white; padding:16px; border-top:1px solid #e0ddd5; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
+            #navMenu .nav-link { padding:10px 0; border-bottom:1px solid #f0ede8; }
+            .navbar > .container-xl { flex-wrap:wrap; }
+        }
     </style>
 </head>
 <body>
@@ -62,50 +31,91 @@
 <a href="#main" class="visually-hidden-focusable">Aller au contenu principal</a>
 
 <nav class="navbar navbar-expand-lg bg-white border-bottom" style="height:80px" aria-label="Navigation principale">
-    <div class="container-xl px-4">
+    <div class="container-xl px-4 d-flex align-items-center">
 
-        {# MOBILE : hamburger gauche + logo centre #}
-        <button class="navbar-toggler d-lg-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-label="Ouvrir le menu" style="order:1">
+        {# Hamburger — mobile gauche #}
+        <button class="navbar-toggler d-lg-none border-0 me-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-label="Ouvrir le menu">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <a class="navbar-brand mx-auto d-lg-none" href="{{ path('app_home') }}" style="order:2">
+        {# Logo — centre mobile, gauche desktop #}
+        <a class="navbar-brand mx-auto mx-lg-0" href="{{ path('app_home') }}">
             <img src="{{ asset('images/logo.svg') }}" alt="Vite et Gourmand" style="height:65px;width:auto">
         </a>
 
-        {# DESKTOP : logo gauche #}
-        <a class="navbar-brand d-none d-lg-flex align-items-center" href="{{ path('app_home') }}" style="order:1">
-            <img src="{{ asset('images/logo.svg') }}" alt="Vite et Gourmand" style="height:65px;width:auto">
-        </a>
-
-        {# Bouton connexion visible sur mobile à droite #}
-        <div class="d-lg-none" style="order:3">
-            {% if app.user %}
-                <a href="{{ path('app_user_dashboard') }}" class="btn btn-vert btn-sm px-3" style="font-size:13px">Mon compte</a>
-            {% else %}
-                <a href="{{ path('app_login') }}" class="btn btn-vert btn-sm px-3" style="font-size:13px">Connexion</a>
-            {% endif %}
-        </div>
-
-        {# MENU collapse #}
-        <div class="collapse navbar-collapse" id="navMenu" style="order:4">
+        {# Menu liens — desktop seulement dans la collapse #}
+        <div class="collapse navbar-collapse" id="navMenu">
             <ul class="navbar-nav mx-auto gap-3">
-                <li class="nav-item"><a class="nav-link {% if app.request.attributes.get('_route') == 'app_home' %}active{% endif %}" href="{{ path('app_home') }}">Accueil</a></li>
-                <li class="nav-item"><a class="nav-link {% if app.request.attributes.get('_route') starts with 'app_menu' %}active{% endif %}" href="{{ path('app_menu_index') }}">Nos menus</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Vos avis</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Aide</a></li>
-                <li class="nav-item"><a class="nav-link {% if app.request.attributes.get('_route') == 'app_contact' %}active{% endif %}" href="{{ path('app_contact') }}">Contact</a></li>
+                <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') == 'app_home' %}active{% endif %}" href="{{ path('app_home') }}">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') starts with 'app_menu' %}active{% endif %}" href="{{ path('app_menu_index') }}">Nos menus</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Vos avis</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Aide</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') == 'app_contact' %}active{% endif %}" href="{{ path('app_contact') }}">Contact</a>
+                </li>
             </ul>
-            <div class="d-none d-lg-flex align-items-center gap-2">
-                {% if app.user %}
-                    <a href="{{ path('app_user_dashboard') }}" class="btn btn-vert btn-sm px-3">Mon compte</a>
-                    <a href="{{ path('app_logout') }}" class="btn btn-outline-secondary btn-sm">Déconnexion</a>
-                {% else %}
-                    <a href="{{ path('app_login') }}" class="btn btn-vert btn-sm px-3">Connexion</a>
-                {% endif %}
-            </div>
         </div>
 
+        {# Icônes droite — visibles desktop ET mobile #}
+        <div class="d-flex align-items-center gap-3 ms-lg-3">
+
+            {# Recherche desktop seulement #}
+            <form action="{{ path('app_menu_index') }}" method="get" class="d-none d-lg-flex align-items-center" style="border:1px solid #e0ddd5;border-radius:20px;padding:4px 12px;">
+                <input type="text" name="search" placeholder="Recherche"
+                       style="border:none;outline:none;font-size:13px;width:110px;background:transparent;color:var(--brun)"
+                       aria-label="Rechercher un menu">
+                <button type="submit" style="border:none;background:none;padding:0;cursor:pointer;color:var(--brun)">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                </button>
+            </form>
+
+            {# Icône compte #}
+            {% if app.user %}
+            <div class="dropdown">
+                <button class="btn p-0 border-0 bg-transparent" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="color:var(--brun)">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" style="border:.5px solid #e0ddd5;border-radius:8px;padding:8px 0;min-width:180px">
+                    <li style="padding:4px 16px;font-size:11px;color:#6B6B5A;font-family:'Lexend',sans-serif">
+                        {{ app.user.prenom }} {{ app.user.nom }}
+                    </li>
+                    <li><hr class="dropdown-divider" style="margin:4px 0"></li>
+                    <li><a class="dropdown-item" href="{{ path('app_user_dashboard') }}" style="font-size:13px;color:var(--brun)">Mes commandes</a></li>
+                    <li><a class="dropdown-item" href="{{ path('app_user_profil') }}" style="font-size:13px;color:var(--brun)">Mon profil</a></li>
+                    {% if is_granted('ROLE_EMPLOYE') %}
+                    <li><a class="dropdown-item" href="{{ path('app_employe_dashboard') }}" style="font-size:13px;color:var(--vert)">Espace employé</a></li>
+                    {% endif %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <li><a class="dropdown-item" href="{{ path('app_admin_dashboard') }}" style="font-size:13px;color:var(--terre)">Espace admin</a></li>
+                    {% endif %}
+                    <li><hr class="dropdown-divider" style="margin:4px 0"></li>
+                    <li><a class="dropdown-item" href="{{ path('app_logout') }}" style="font-size:13px;color:#dc2626">Déconnexion</a></li>
+                </ul>
+            </div>
+            {% else %}
+            <a href="{{ path('app_login') }}" style="color:var(--brun)" aria-label="Se connecter">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            </a>
+            {% endif %}
+
+            {# Icône panier #}
+            <a href="{{ path('app_commande_new') }}" style="color:var(--brun)" aria-label="Commander">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <path d="M16 10a4 4 0 0 1-8 0"/>
+                </svg>
+            </a>
+
+        </div>
     </div>
 </nav>
 
@@ -134,30 +144,30 @@
             </div>
             <div class="col-lg-2">
                 <h5>Horaires</h5>
-                <p style="font-size:11px">Lun : Fermé</p>
-                <p style="font-size:11px">Mar : Fermé</p>
-                <p style="font-size:11px">Mer–Dim : 11h–15h / 18h–23h</p>
+                <p style="font-size:11px;margin:0">Lun : Fermé</p>
+                <p style="font-size:11px;margin:0">Mar : Fermé</p>
+                <p style="font-size:11px;margin:0">Mer–Dim : 11h–15h / 18h–23h</p>
             </div>
             <div class="col-lg-2">
                 <h5>À propos</h5>
                 <a href="#" style="font-size:12px;display:block;line-height:2.2">Qui sommes-nous ?</a>
-                <a href="#" style="font-size:12px;display:block;line-height:2.2">Nos menus</a>
+                <a href="{{ path('app_menu_index') }}" style="font-size:12px;display:block;line-height:2.2">Nos menus</a>
                 <a href="#" style="font-size:12px;display:block;line-height:2.2">Liste allergènes</a>
                 <a href="#" style="font-size:12px;display:block;line-height:2.2">Les avis</a>
+                <a href="#" style="font-size:12px;display:block;line-height:2.2">FAQ</a>
             </div>
             <div class="col-lg-2">
                 <h5>Informations</h5>
                 <a href="#" style="font-size:12px;display:block;line-height:2.2">Mentions légales</a>
-                <a href="#" style="font-size:12px;display:block;line-height:2.2">FAQ</a>
                 <a href="#" style="font-size:12px;display:block;line-height:2.2">CGV</a>
+                <a href="#" style="font-size:12px;display:block;line-height:2.2">CGU</a>
                 <a href="#" style="font-size:12px;display:block;line-height:2.2">Politique de confidentialité</a>
+                <a href="#" style="font-size:12px;display:block;line-height:2.2">Cookies</a>
             </div>
             <div class="col-lg-3">
-                <h5>Newsletter</h5>
-                <form action="#" method="post" class="d-flex gap-2">
-                    <input type="email" class="form-control form-control-sm" placeholder="Votre email" aria-label="Email newsletter">
-                    <button type="submit" class="btn btn-terre btn-sm">OK</button>
-                </form>
+                <h5>Contact</h5>
+                <a href="{{ path('app_contact') }}" style="font-size:12px;display:block;line-height:2.2">Nous contacter</a>
+                <p style="font-size:12px;margin-top:8px">contact@viteetgourmand.fr</p>
             </div>
         </div>
         <hr style="border-color:#3a3928;margin:20px 0 10px">
