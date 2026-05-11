@@ -30,92 +30,129 @@
 
 <a href="#main" class="visually-hidden-focusable">Aller au contenu principal</a>
 
-<nav class="navbar navbar-expand-lg bg-white border-bottom" style="height:80px" aria-label="Navigation principale">
-    <div class="container-xl px-4 d-flex align-items-center">
+<nav class="navbar navbar-expand-lg bg-white border-bottom" aria-label="Navigation principale">
+    <div class="container-xl px-4">
 
-        {# Hamburger — mobile gauche #}
-        <button class="navbar-toggler d-lg-none border-0 me-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-label="Ouvrir le menu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        {# Ligne 1 : hamburger + logo + icônes — toujours visible #}
+        <div class="d-flex align-items-center w-100" style="height:80px">
 
-        {# Logo — centre mobile, gauche desktop #}
-        <a class="navbar-brand mx-auto mx-lg-0" href="{{ path('app_home') }}">
-            <img src="{{ asset('images/logo.svg') }}" alt="Vite et Gourmand" style="height:65px;width:auto">
-        </a>
+            {# Hamburger gauche mobile #}
+            <button class="navbar-toggler d-lg-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-label="Ouvrir le menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        {# Menu liens — desktop seulement dans la collapse #}
-        <div class="collapse navbar-collapse" id="navMenu">
-            <ul class="navbar-nav mx-auto gap-3">
+            {# Logo centre mobile / gauche desktop #}
+            <a class="navbar-brand mx-auto mx-lg-0" href="{{ path('app_home') }}">
+                <img src="{{ asset('images/logo.svg') }}" alt="Vite et Gourmand" style="height:65px;width:auto">
+            </a>
+
+            {# Liens desktop au centre #}
+            <div class="d-none d-lg-flex mx-auto">
+                <ul class="navbar-nav gap-3 mb-0">
+                    <li class="nav-item">
+                        <a class="nav-link {% if app.request.attributes.get('_route') == 'app_home' %}active{% endif %}" href="{{ path('app_home') }}">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if app.request.attributes.get('_route') starts with 'app_menu' %}active{% endif %}" href="{{ path('app_menu_index') }}">Nos menus</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Vos avis</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Aide</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if app.request.attributes.get('_route') == 'app_contact' %}active{% endif %}" href="{{ path('app_contact') }}">Contact</a>
+                    </li>
+                </ul>
+            </div>
+
+            {# Icônes droite — TOUJOURS visibles desktop et mobile #}
+            <div class="d-flex align-items-center gap-3 ms-auto ms-lg-0">
+
+                {# Recherche desktop seulement #}
+                <form action="{{ path('app_menu_index') }}" method="get" class="d-none d-lg-flex align-items-center" style="border:1px solid #e0ddd5;border-radius:20px;padding:4px 12px;">
+                    <input type="text" name="search" placeholder="Recherche"
+                           style="border:none;outline:none;font-size:13px;width:110px;background:transparent;color:var(--brun)"
+                           aria-label="Rechercher un menu">
+                    <button type="submit" style="border:none;background:none;padding:0;cursor:pointer;color:var(--brun)">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                    </button>
+                </form>
+
+                {# Icône compte #}
+                {% if app.user %}
+                <div class="dropdown">
+                    <button class="btn p-0 border-0 bg-transparent" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="color:var(--brun)">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" style="border:.5px solid #e0ddd5;border-radius:8px;padding:8px 0;min-width:180px">
+                        <li style="padding:4px 16px;font-size:11px;color:#6B6B5A;font-family:'Lexend',sans-serif">
+                            {{ app.user.prenom }} {{ app.user.nom }}
+                        </li>
+                        <li><hr class="dropdown-divider" style="margin:4px 0"></li>
+                        <li><a class="dropdown-item" href="{{ path('app_user_dashboard') }}" style="font-size:13px;color:var(--brun)">Mes commandes</a></li>
+                        <li><a class="dropdown-item" href="{{ path('app_user_profil') }}" style="font-size:13px;color:var(--brun)">Mon profil</a></li>
+                        {% if is_granted('ROLE_EMPLOYE') %}
+                        <li><a class="dropdown-item" href="{{ path('app_employe_dashboard') }}" style="font-size:13px;color:var(--vert)">Espace employé</a></li>
+                        {% endif %}
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <li><a class="dropdown-item" href="{{ path('app_admin_dashboard') }}" style="font-size:13px;color:var(--terre)">Espace admin</a></li>
+                        {% endif %}
+                        <li><hr class="dropdown-divider" style="margin:4px 0"></li>
+                        <li><a class="dropdown-item" href="{{ path('app_logout') }}" style="font-size:13px;color:#dc2626">Déconnexion</a></li>
+                    </ul>
+                </div>
+                {% else %}
+                <a href="{{ path('app_login') }}" style="color:var(--brun)" aria-label="Se connecter">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                </a>
+                {% endif %}
+
+                {# Icône panier #}
+                <a href="{{ path('app_commande_new') }}" style="color:var(--brun)" aria-label="Commander">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <path d="M16 10a4 4 0 0 1-8 0"/>
+                    </svg>
+                </a>
+
+            </div>
+        </div>
+
+        {# Ligne 2 : menu mobile collapse — s'ouvre EN DESSOUS de la ligne 1 #}
+        <div class="collapse d-lg-none" id="navMenu" style="border-top:1px solid #e0ddd5">
+            <ul class="navbar-nav py-2">
                 <li class="nav-item">
-                    <a class="nav-link {% if app.request.attributes.get('_route') == 'app_home' %}active{% endif %}" href="{{ path('app_home') }}">Accueil</a>
+                    <a class="nav-link py-3 {% if app.request.attributes.get('_route') == 'app_home' %}active{% endif %}" style="border-bottom:1px solid #f0ede8" href="{{ path('app_home') }}">Accueil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if app.request.attributes.get('_route') starts with 'app_menu' %}active{% endif %}" href="{{ path('app_menu_index') }}">Nos menus</a>
+                    <a class="nav-link py-3 {% if app.request.attributes.get('_route') starts with 'app_menu' %}active{% endif %}" style="border-bottom:1px solid #f0ede8" href="{{ path('app_menu_index') }}">Nos menus</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Vos avis</a>
+                    <a class="nav-link py-3" style="border-bottom:1px solid #f0ede8" href="#">Vos avis</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Aide</a>
+                    <a class="nav-link py-3" style="border-bottom:1px solid #f0ede8" href="#">Aide</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if app.request.attributes.get('_route') == 'app_contact' %}active{% endif %}" href="{{ path('app_contact') }}">Contact</a>
+                    <a class="nav-link py-3 {% if app.request.attributes.get('_route') == 'app_contact' %}active{% endif %}" href="{{ path('app_contact') }}">Contact</a>
+                </li>
+                {# Recherche mobile #}
+                <li class="nav-item mt-2">
+                    <form action="{{ path('app_menu_index') }}" method="get" class="d-flex align-items-center" style="border:1px solid #e0ddd5;border-radius:20px;padding:6px 14px;">
+                        <input type="text" name="search" placeholder="Rechercher un menu"
+                               style="border:none;outline:none;font-size:13px;width:100%;background:transparent;color:var(--brun)"
+                               aria-label="Rechercher un menu">
+                        <button type="submit" style="border:none;background:none;padding:0;cursor:pointer;color:var(--brun)">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                        </button>
+                    </form>
                 </li>
             </ul>
         </div>
 
-        {# Icônes droite — visibles desktop ET mobile #}
-        <div class="d-flex align-items-center gap-3 ms-lg-3">
-
-            {# Recherche desktop seulement #}
-            <form action="{{ path('app_menu_index') }}" method="get" class="d-none d-lg-flex align-items-center" style="border:1px solid #e0ddd5;border-radius:20px;padding:4px 12px;">
-                <input type="text" name="search" placeholder="Recherche"
-                       style="border:none;outline:none;font-size:13px;width:110px;background:transparent;color:var(--brun)"
-                       aria-label="Rechercher un menu">
-                <button type="submit" style="border:none;background:none;padding:0;cursor:pointer;color:var(--brun)">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                </button>
-            </form>
-
-            {# Icône compte #}
-            {% if app.user %}
-            <div class="dropdown">
-                <button class="btn p-0 border-0 bg-transparent" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="color:var(--brun)">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end" style="border:.5px solid #e0ddd5;border-radius:8px;padding:8px 0;min-width:180px">
-                    <li style="padding:4px 16px;font-size:11px;color:#6B6B5A;font-family:'Lexend',sans-serif">
-                        {{ app.user.prenom }} {{ app.user.nom }}
-                    </li>
-                    <li><hr class="dropdown-divider" style="margin:4px 0"></li>
-                    <li><a class="dropdown-item" href="{{ path('app_user_dashboard') }}" style="font-size:13px;color:var(--brun)">Mes commandes</a></li>
-                    <li><a class="dropdown-item" href="{{ path('app_user_profil') }}" style="font-size:13px;color:var(--brun)">Mon profil</a></li>
-                    {% if is_granted('ROLE_EMPLOYE') %}
-                    <li><a class="dropdown-item" href="{{ path('app_employe_dashboard') }}" style="font-size:13px;color:var(--vert)">Espace employé</a></li>
-                    {% endif %}
-                    {% if is_granted('ROLE_ADMIN') %}
-                    <li><a class="dropdown-item" href="{{ path('app_admin_dashboard') }}" style="font-size:13px;color:var(--terre)">Espace admin</a></li>
-                    {% endif %}
-                    <li><hr class="dropdown-divider" style="margin:4px 0"></li>
-                    <li><a class="dropdown-item" href="{{ path('app_logout') }}" style="font-size:13px;color:#dc2626">Déconnexion</a></li>
-                </ul>
-            </div>
-            {% else %}
-            <a href="{{ path('app_login') }}" style="color:var(--brun)" aria-label="Se connecter">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-            </a>
-            {% endif %}
-
-            {# Icône panier #}
-            <a href="{{ path('app_commande_new') }}" style="color:var(--brun)" aria-label="Commander">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-                    <line x1="3" y1="6" x2="21" y2="6"/>
-                    <path d="M16 10a4 4 0 0 1-8 0"/>
-                </svg>
-            </a>
-
-        </div>
     </div>
 </nav>
 
