@@ -25,4 +25,4 @@ ENV APP_DEBUG=0
 
 EXPOSE 8080
 
-CMD sh -c "php bin/console cache:warmup --env=prod --no-debug && php bin/console doctrine:migrations:migrate --no-interaction --env=prod --no-debug && php -S 0.0.0.0:${PORT:-8080} -t public/"
+CMD sh -c "php bin/console cache:warmup --env=prod --no-debug && php bin/console doctrine:migrations:migrate --no-interaction --env=prod --no-debug && php bin/console doctrine:fixtures:load --no-interaction --env=prod --no-debug || true && php -S 0.0.0.0:${PORT:-8080} -t public/"
