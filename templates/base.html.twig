@@ -20,6 +20,26 @@
         footer h5 { color:var(--beige); font-family:'Lato',sans-serif; font-size:11px; text-transform:uppercase; letter-spacing:0.8px; }
         footer a { color:#9A9A7A; text-decoration:none; }
         footer a:hover { color:var(--beige); }
+        @media (max-width: 992px) {
+    #navMenu {
+        background: white;
+        padding: 16px;
+        border-top: 1px solid #e0ddd5;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    #navMenu .navbar-nav {
+        gap: 0 !important;
+    }
+    #navMenu .nav-link {
+        padding: 10px 0;
+        border-bottom: 1px solid #f0ede8;
+    }
+    #navMenu .d-flex {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid #e0ddd5;
+    }
+}
     </style>
 </head>
 <body>
@@ -36,7 +56,7 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-label="Ouvrir le menu">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navMenu">
+        <div class="collapse navbar-collapse" id="navMenu" style="background:white"> 
             <ul class="navbar-nav mx-auto gap-3">
                 <li class="nav-item">
                     <a class="nav-link {% if app.request.attributes.get('_route') == 'app_home' %}active{% endif %}" href="{{ path('app_home') }}">Accueil</a>
