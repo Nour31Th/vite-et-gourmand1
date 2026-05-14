@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\AvisRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AvisRepository::class)]
 class Avis
@@ -15,9 +16,12 @@ class Avis
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: 'La note est obligatoire.')]
+    #[Assert\Range(min: 1, max: 5, notInRangeMessage: 'La note doit être comprise entre 1 et 5.')]
     private ?int $note = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\NotBlank(message: 'Le commentaire est obligatoire.')]
     private ?string $commentaire = null;
 
     #[ORM\Column]
@@ -43,7 +47,6 @@ class Avis
     public function setNote(int $note): static
     {
         $this->note = $note;
-
         return $this;
     }
 
@@ -55,7 +58,6 @@ class Avis
     public function setCommentaire(?string $commentaire): static
     {
         $this->commentaire = $commentaire;
-
         return $this;
     }
 
@@ -67,7 +69,6 @@ class Avis
     public function setValide(bool $valide): static
     {
         $this->valide = $valide;
-
         return $this;
     }
 
@@ -79,7 +80,6 @@ class Avis
     public function setDateAvis(\DateTime $date_avis): static
     {
         $this->date_avis = $date_avis;
-
         return $this;
     }
 
@@ -91,7 +91,6 @@ class Avis
     public function setUtilisateur(?User $utilisateur): static
     {
         $this->utilisateur = $utilisateur;
-
         return $this;
     }
 }
