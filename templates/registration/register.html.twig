@@ -1,23 +1,99 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Créer un compte — Vite & Gourmand{% endblock %}
 
 {% block body %}
-    {% for flash_error in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-    {% endfor %}
 
-    <h1>Register</h1>
+<div style="background:var(--beige);padding:20px;text-align:center">
+    <h1 style="font-family:'Montserrat',sans-serif;font-size:36px;font-weight:700;color:var(--brun)">
+        Créer un compte
+    </h1>
+</div>
 
-    {{ form_errors(registrationForm) }}
+<section style="padding:48px 80px;background:var(--bgclair);display:flex;justify-content:center">
+    <div style="background:#fff;border-radius:8px;padding:32px;border:.5px solid #e0ddd5;width:100%;max-width:600px">
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+        {% for flash_error in app.flashes('verify_email_error') %}
+            <div class="alert alert-danger mb-3">{{ flash_error }}</div>
+        {% endfor %}
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+        {{ form_start(registrationForm, {'attr': {'novalidate': 'novalidate'}}) }}
+
+        {{ form_errors(registrationForm) }}
+
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
+                <label class="form-label" style="font-size:12px;font-weight:700;color:var(--brun)">{{ form_label(registrationForm.prenom) }}</label>
+                {{ form_widget(registrationForm.prenom, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(registrationForm.prenom) }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label" style="font-size:12px;font-weight:700;color:var(--brun)">{{ form_label(registrationForm.nom) }}</label>
+                {{ form_widget(registrationForm.nom, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(registrationForm.nom) }}
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" style="font-size:12px;font-weight:700;color:var(--brun)">{{ form_label(registrationForm.gsm) }}</label>
+            {{ form_widget(registrationForm.gsm, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(registrationForm.gsm) }}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" style="font-size:12px;font-weight:700;color:var(--brun)">{{ form_label(registrationForm.adresse) }}</label>
+            {{ form_widget(registrationForm.adresse, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(registrationForm.adresse) }}
+        </div>
+
+        <div class="row g-3 mb-3">
+            <div class="col-md-8">
+                <label class="form-label" style="font-size:12px;font-weight:700;color:var(--brun)">{{ form_label(registrationForm.ville) }}</label>
+                {{ form_widget(registrationForm.ville, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(registrationForm.ville) }}
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" style="font-size:12px;font-weight:700;color:var(--brun)">{{ form_label(registrationForm.code_postal) }}</label>
+                {{ form_widget(registrationForm.code_postal, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(registrationForm.code_postal) }}
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" style="font-size:12px;font-weight:700;color:var(--brun)">{{ form_label(registrationForm.email) }}</label>
+            {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(registrationForm.email) }}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" style="font-size:12px;font-weight:700;color:var(--brun)">{{ form_label(registrationForm.plainPassword) }}</label>
+            {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(registrationForm.plainPassword) }}
+            <div style="font-family:'Lexend',sans-serif;font-size:11px;color:#6B6B5A;margin-top:4px">
+                10 caractères minimum · 1 majuscule · 1 minuscule · 1 chiffre · 1 caractère spécial
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <div class="form-check">
+                {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
+                <label class="form-check-label" style="font-size:12px;color:#4A4A3A">
+                    J'accepte les <a href="#" style="color:var(--vert)">conditions générales d'utilisation</a>
+                </label>
+            </div>
+            {{ form_errors(registrationForm.agreeTerms) }}
+        </div>
+
+        <button type="submit" class="btn btn-vert w-100" style="font-size:15px;padding:12px;min-height:44px">
+            Créer mon compte
+        </button>
+
+        {{ form_end(registrationForm) }}
+
+        <p style="text-align:center;margin-top:16px;font-size:13px;color:#6B6B5A">
+            Déjà un compte ? <a href="{{ path('app_login') }}" style="color:var(--vert);font-weight:700">Se connecter</a>
+        </p>
+    </div>
+</section>
+
 {% endblock %}
