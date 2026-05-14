@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\HistoriqueStatut;
 use App\Repository\CommandeRepository;
 use App\Repository\AvisRepository;
+use App\Repository\HoraireRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -98,4 +99,35 @@ class EmployeController extends AbstractController
         }
         return $this->redirectToRoute('app_employe_avis');
     }
+#[Route('/horaires', name: 'app_employe_horaires')]
+public function horaires(HoraireRepository $horaireRepository): Response
+{
+    $horaires = $horaireRepository->findAll();
+    return $this->render('employe/horaires.html.twig', [
+        'horaires' => $horaires,
+    ]);
 }
+
+#[Route('/horaires/{id}/modifier', name: 'app_employe_modifier_horaire', methods: ['POST'])]
+public function modifierHoraire(
+    int $id,
+    Request $request,
+    HoraireRepository $horaireRepository,
+    EntityManagerInterface $em
+): Response {
+    $horaire = $horaireRepository->find($id);
+    if ($horaire) {
+        $ferme = $request->request->get('ferme');
+        if ($ferme) {
+            $horaire->setHeureOuverture(new \DateTime('00:00'));
+            $horaire->setHeureFermeture(new \DateTime('00:00'));
+        } else {
+            $horaire->setHeureOuverture(new \DateTime($request->request->get('ouverture')));
+            $horaire->setHeureFermeture(new \DateTime($request->request->get('fermeture')));
+        }
+        $em->flush();
+        $this->addFlash('success', 'Horaire mis à jour.');
+    }
+    return $this->redirectToRoute('app_employe_horaires');
+}
+    }

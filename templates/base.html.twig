@@ -170,9 +170,16 @@
             </div>
             <div class="col-lg-2">
                 <h5>Horaires</h5>
-                <p style="font-size:11px;margin:0">Lun : Fermé</p>
-                <p style="font-size:11px;margin:0">Mar : Fermé</p>
-                <p style="font-size:11px;margin:0">Mer–Dim : 11h–15h / 18h–23h</p>
+                {% for horaire in horaires_footer %}
+                <p style="font-size:11px;margin:0">
+                    {{ horaire.jour }} :
+                    {% if horaire.heureOuverture|date('H:i') == '00:00' %}
+                        Fermé
+                    {% else %}
+                        {{ horaire.heureOuverture|date('H\\hi') }}–{{ horaire.heureFermeture|date('H\\hi') }}
+                    {% endif %}
+                </p>
+                {% endfor %}
             </div>
             <div class="col-lg-2">
                 <h5>À propos</h5>

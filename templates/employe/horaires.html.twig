@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des horaires{% endblock %}
+
+{% block body %}
+
+<div style="background:var(--brun);padding:20px;text-align:center">
+    <h1 style="font-family:'Montserrat',sans-serif;font-size:30px;font-weight:700;color:#fff">Gestion des horaires</h1>
+</div>
+
+<section style="padding:32px 80px;background:var(--bgclair)">
+    <div class="d-flex gap-2 mb-4">
+        <a href="{{ path('app_employe_dashboard') }}" class="btn btn-outline-secondary btn-sm">Commandes</a>
+        <a href="{{ path('app_employe_avis') }}" class="btn btn-outline-secondary btn-sm">Avis</a>
+        <a href="{{ path('app_employe_horaires') }}" class="btn btn-brun btn-sm">Horaires</a>
+    </div>
+
+    {% for horaire in horaires %}
+    <div style="background:#fff;border-radius:8px;padding:20px;margin-bottom:12px;border:.5px solid #e0ddd5">
+        <form method="post" action="{{ path('app_employe_modifier_horaire', {id: horaire.id}) }}" class="d-flex align-items-center gap-3 flex-wrap">
+            <div style="font-weight:700;color:var(--brun);width:90px;font-size:14px">{{ horaire.jour }}</div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="ferme" id="ferme{{ horaire.id }}"
+                    {% if horaire.heureOuverture|date('H:i') == '00:00' %}checked{% endif %}
+                    onchange="toggleHoraire({{ horaire.id }})">
+                <label class="form-check-label" for="ferme{{ horaire.id }}" style="font-size:13px">Fermé</label>
+            </div>
+            <div id="heures{{ horaire.id }}" class="d-flex align-items-center gap-2 {% if horaire.heureOuverture|date('H:i') == '00:00' %}d-none{% endif %}">
+                <label style="font-size:12px;color:#6B6B5A">Ouverture</label>
+                <input type="time" name="ouverture" class="form-control form-control-sm" style="width:120px"
+                    value="{{ horaire.heureOuverture|date('H:i') }}">
+                <label style="font-size:12px;color:#6B6B5A">Fermeture</label>
+                <input type="time" name="fermeture" class="form-control form-control-sm" style="width:120px"
+                    value="{{ horaire.heureFermeture|date('H:i') }}">
+            </div>
+            <button type="submit" class="btn btn-vert btn-sm ms-auto">Enregistrer</button>
+        </form>
+    </div>
+    {% endfor %}
+</section>
+
+{% endblock %}
+
+{% block javascripts %}
+<script>
+function toggleHoraire(id) {
+    const heures = document.getElementById('heures' + id);
+    heures.classList.toggle('d-none');
+}
+</script>
+{% endblock %}
