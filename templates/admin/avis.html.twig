@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Avis à valider — Admin{% endblock %}
+
+{% block body %}
+
+<div style="background:var(--brun);padding:20px;text-align:center">
+    <h1 style="font-family:'Montserrat',sans-serif;font-size:30px;font-weight:700;color:#fff">Gestion des avis</h1>
+</div>
+
+<section style="padding:32px 80px;background:var(--bgclair)">
+    <div class="d-flex gap-2 mb-4">
+        <a href="{{ path('app_admin_dashboard') }}" class="btn btn-outline-secondary btn-sm">Commandes</a>
+        <a href="{{ path('app_admin_employes') }}" class="btn btn-outline-secondary btn-sm">Employés</a>
+        <a href="{{ path('app_admin_avis') }}" class="btn btn-brun btn-sm">Avis</a>
+        <a href="{{ path('app_admin_stats') }}" class="btn btn-outline-secondary btn-sm">Statistiques</a>
+    </div>
+
+    {% if avis|length == 0 %}
+    <div style="background:#fff;border-radius:8px;padding:32px;text-align:center;border:.5px solid #e0ddd5">
+        <p style="color:#6B6B5A">Aucun avis en attente de validation.</p>
+    </div>
+    {% else %}
+    {% for avi in avis %}
+    <div style="background:#fff;border-radius:8px;padding:20px;margin-bottom:12px;border:.5px solid #e0ddd5">
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <div style="color:var(--terre);font-size:18px;margin-bottom:6px">
+                    {% for i in 1..avi.note %}★{% endfor %}{% for i in avi.note+1..5 %}☆{% endfor %}
+                </div>
+                <p style="font-size:13px;color:#4A4A3A;line-height:1.6;font-style:italic;margin-bottom:8px">
+                    « {{ avi.commentaire }} »
+                </p>
+                <div style="font-family:'Lexend',sans-serif;font-size:11px;color:#6B6B5A">
+                    Par {{ avi.utilisateur.prenom }} {{ avi.utilisateur.nom }}
+                    · {{ avi.dateAvis|date('d/m/Y') }}
+                </div>
+            </div>
+            <div class="d-flex gap-2">
+                <form method="post" action="{{ path('app_admin_valider_avis', {id: avi.id}) }}">
+                    <button type="submit" class="btn btn-vert btn-sm">✓ Valider</button>
+                </form>
+                <form method="post" action="{{ path('app_admin_refuser_avis', {id: avi.id}) }}"
+                      onsubmit="return confirm('Confirmer le refus ?')">
+                    <button type="submit" class="btn btn-outline-danger btn-sm">✗ Refuser</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+</section>
+
+{% endblock %}
