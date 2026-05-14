@@ -16,12 +16,12 @@
             <input type="hidden" name="commande_id" value="{{ commande_id }}">
 
             <div class="mb-4">
-                <label style="font-size:12px;font-weight:700;color:var(--brun);display:block;margin-bottom:8px">Note *</label>
+                <label style="font-size:12px;font-weight:700;color:var(--brun);display:block;margin-bottom:8px">Note * (de 1 à 5)</label>
                 <div class="d-flex gap-2">
                     {% for i in 1..5 %}
                     <div>
                         <input type="radio" name="note" id="note{{ i }}" value="{{ i }}" required style="display:none">
-                        <label for="note{{ i }}" style="font-size:32px;color:#e0ddd5;cursor:pointer" class="star-label">★</label>
+                        <label for="note{{ i }}" style="font-size:32px;color:#e0ddd5;cursor:pointer" class="star-label">●</label>
                     </div>
                     {% endfor %}
                 </div>
@@ -43,15 +43,24 @@
 
 {% block javascripts %}
 <script>
-document.querySelectorAll('.star-label').forEach((star, index) => {
+const labels = document.querySelectorAll('.star-label');
+let selectedIndex = -1;
+
+labels.forEach((star, index) => {
     star.addEventListener('click', () => {
-        document.querySelectorAll('.star-label').forEach((s, i) => {
-            s.style.color = i <= index ? 'var(--terre)' : '#e0ddd5';
+        selectedIndex = index;
+        labels.forEach((s, i) => {
+            s.style.color = i <= selectedIndex ? 'var(--terre)' : '#e0ddd5';
         });
     });
     star.addEventListener('mouseover', () => {
-        document.querySelectorAll('.star-label').forEach((s, i) => {
+        labels.forEach((s, i) => {
             s.style.color = i <= index ? 'var(--terre)' : '#e0ddd5';
+        });
+    });
+    star.addEventListener('mouseout', () => {
+        labels.forEach((s, i) => {
+            s.style.color = i <= selectedIndex ? 'var(--terre)' : '#e0ddd5';
         });
     });
 });
