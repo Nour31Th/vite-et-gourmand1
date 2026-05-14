@@ -20,13 +20,13 @@
             <p style="font-size:14px;color:var(--brun);line-height:1.7">L'aventure Vite &amp; Gourmand a débuté il y a 25 ans à Bordeaux. Depuis le premier jour, notre duo et l'équipe travaillent avec la même ambition : prouver que l'on peut manger vite, mais surtout très bien.</p>
             <p style="font-size:14px;color:var(--brun);line-height:1.7;margin-top:10px">Spécialistes de la cuisine de saison, nous créons des menus qui ne restent jamais figés. Que ce soit pour un déjeuner sur le pouce ou pour célébrer les grandes occasions, nous vous accompagnons dans tous vos événements, petits et grands.</p>
             <h2 style="font-family:'Poppins',sans-serif;font-size:17px;font-weight:600;color:var(--brun);margin:14px 0 10px">Notre secret ?</h2>
-            <p style="font-size:14px;color:var(--brun);line-height:1.7">Un menu en constante évolution qui suit le rythme des saisons et nos inspirations du moment pour vous surprendre à chaque bouchée.</p>
+            <p style="font-size:14px;color:var(--brun);line-height:1.7">Un menu en constante évolution qui suit le rythme des saisons et nos inspirations du moment pour vous surprendre à chaque bouchée. Notre carte, en perpétuelle mutation, est le reflet de notre créativité et de notre amour pour les bons produits.</p>
             <p style="font-size:13px;color:var(--brun);font-style:italic;margin-top:10px">Venez découvrir notre univers où la rapidité ne sacrifie jamais la gourmandise ni la qualité !</p>
-            <a href="#" class="btn btn-brun mt-3" style="font-size:13px;padding:8px 16px;border-radius:4px">Voir la carte</a>
+            <a href="{{ path('app_menu_index') }}" class="btn btn-brun mt-3" style="font-size:13px;padding:8px 16px;border-radius:4px;min-height:44px;display:inline-flex;align-items:center">Commander</a>
         </div>
         <div class="col-md-6" style="min-height:300px;overflow:hidden">
-    <img src="{{ asset('images/julie_et_jose.png') }}" alt="Julie et José" style="width:100%;height:100%;min-height:300px;object-fit:cover;display:block">
-</div>
+            <img src="{{ asset('images/julie_et_jose.png') }}" alt="Julie et José" style="width:100%;height:100%;min-height:300px;object-fit:cover;display:block">
+        </div>
     </div>
 </section>
 
@@ -37,15 +37,15 @@
         <div class="col-md-6" style="background:var(--vert);padding:28px">
             <h2 style="font-family:'Poppins',sans-serif;font-size:15px;font-weight:600;color:#fff;margin-bottom:10px">Chez Vite &amp; Gourmand, la qualité de votre expérience repose sur une équipe soudée et un savoir-faire maîtrisé de bout en bout.</h2>
             <ul style="padding-left:18px">
-                <li style="font-size:13px;color:#E8F0E8;line-height:1.8">Julie et José, forts de leurs 25 ans d'expérience, assurent la direction et l'âme de l'établissement.</li>
-                <li style="font-size:13px;color:#E8F0E8;line-height:1.8">Nos employés de cuisine préparent chaque plat avec une rigueur artisanale.</li>
-                <li style="font-size:13px;color:#E8F0E8;line-height:1.8">Nos livreurs assurent le dernier maillon de la chaîne avec ponctualité et courtoisie.</li>
+                <li style="font-size:13px;color:#E8F0E8;line-height:1.8">Julie et José, forts de leurs 25 ans d'expérience, assurent la direction et l'âme de l'établissement, veillant à ce que chaque recette respecte l'identité de leur cuisine.</li>
+                <li style="font-size:13px;color:#E8F0E8;line-height:1.8">En coulisses, nos employés de cuisine préparent chaque plat avec une rigueur artisanale, transformant des produits frais en moments gourmands.</li>
+                <li style="font-size:13px;color:#E8F0E8;line-height:1.8">Enfin, nos livreurs assurent le dernier maillon de la chaîne avec ponctualité et courtoisie, pour que vos repas arrivent à destination dans des conditions irréprochables.</li>
             </ul>
-            <p style="font-size:13px;color:#E8F0E8;line-height:1.7;margin-top:10px">Chaque membre de l'équipe partage la même exigence : vous offrir un service fluide et professionnel.</p>
+            <p style="font-size:13px;color:#E8F0E8;line-height:1.7;margin-top:10px">Chaque membre de l'équipe partage la même exigence : vous offrir un service fluide et professionnel, afin que votre seule préoccupation soit de savourer l'instant.</p>
         </div>
         <div class="col-md-6" style="min-height:240px;overflow:hidden">
-    <img src="{{ asset('images/photo_equipe.png') }}" alt="Notre équipe" style="width:100%;height:100%;min-height:240px;object-fit:cover;display:block">
-</div>
+            <img src="{{ asset('images/photo_equipe.png') }}" alt="Notre équipe" style="width:100%;height:100%;min-height:240px;object-fit:cover;display:block">
+        </div>
     </div>
 </section>
 
@@ -54,41 +54,37 @@
     <p style="font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--brun);margin-bottom:16px" id="titre-livraison">Une livraison rapide dans Bordeaux et ses environs</p>
     <div class="row g-0 rounded overflow-hidden">
         <div class="col-md-6" style="background:var(--beige);padding:28px">
-            <h2 style="font-family:'Poppins',sans-serif;font-size:15px;font-weight:600;color:var(--brun);margin-bottom:10px">Pour vous garantir une fraîcheur optimale et une ponctualité exemplaire, nous assurons nous-mêmes nos livraisons.</h2>
-            <p style="font-size:13px;color:var(--brun);line-height:1.7">Que vous soyez un particulier ou une entreprise, notre service de livraison s'adapte à vos besoins. Nous couvrons l'ensemble de la métropole bordelaise.</p>
+            <h2 style="font-family:'Poppins',sans-serif;font-size:15px;font-weight:600;color:var(--brun);margin-bottom:10px">Pour vous garantir une fraîcheur optimale et une ponctualité exemplaire, nous assurons nous-mêmes nos livraisons au cœur de Bordeaux et dans sa périphérie.</h2>
+            <p style="font-size:13px;color:var(--brun);line-height:1.7">Que vous soyez un particulier souhaitant un repas de fête à domicile ou une entreprise en quête d'un déjeuner de qualité au bureau, notre service de livraison s'adapte à vos besoins. Nous couvrons l'ensemble de la métropole bordelaise pour vous apporter la gourmandise directement à votre porte, avec le sourire et le professionnalisme qui nous caractérisent depuis 25 ans.</p>
             <div style="background:rgba(255,255,255,.4);padding:8px 12px;border-radius:4px;border-left:3px solid var(--brun);font-family:'Lexend',sans-serif;font-size:12px;color:var(--brun);margin:10px 0">
                 Livraison offerte à Bordeaux · +0,59 €/km hors Bordeaux
             </div>
-            <a href="#" class="btn btn-brun mt-2" style="font-size:13px;padding:8px 16px;border-radius:4px">Voir les modalités de livraison</a>
+            <a href="{{ path('app_contact') }}" class="btn btn-brun mt-2" style="font-size:13px;padding:8px 16px;border-radius:4px;min-height:44px;display:inline-flex;align-items:center">Voir les modalités de livraison</a>
         </div>
         <div class="col-md-6" style="min-height:220px;overflow:hidden">
-    <img src="{{ asset('images/carte_bordeaux_metropole.png') }}" alt="Carte Bordeaux métropole" style="width:100%;height:100%;min-height:220px;object-fit:cover;display:block">
-</div>
+            <img src="{{ asset('images/carte_bordeaux_metropole.png') }}" alt="Carte Bordeaux métropole" style="width:100%;height:100%;min-height:220px;object-fit:cover;display:block">
+        </div>
     </div>
 </section>
 
 {# AVIS #}
 <section style="padding:48px 80px;background:#fff" aria-labelledby="titre-avis">
     <p style="font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--brun);margin-bottom:4px" id="titre-avis">Ce que vous pensez de nous !</p>
-    <p style="font-size:14px;color:#6B6B5A;margin-bottom:24px">Votre satisfaction est notre plus belle récompense depuis 25 ans.</p>
+    <p style="font-size:14px;color:#6B6B5A;margin-bottom:24px">Votre satisfaction est notre plus belle récompense depuis 25 ans. Que ce soit pour un déjeuner quotidien ou pour un événement mémorable, nous sommes fiers de partager vos retours.</p>
     <div class="row g-3">
         {% for avi in avis %}
         <div class="col-md-3">
             <article style="background:var(--bgclair);border-radius:8px;padding:16px;border:.5px solid #e0ddd5;height:100%">
                 <div style="color:var(--terre);font-size:14px;margin-bottom:6px" aria-label="{{ avi.note }} sur 5">
-    {% for i in 1..5 %}
-        {% if i <= avi.note %}●{% else %}○{% endif %}
-    {% endfor %}
-</div>
+                    {% for i in 1..5 %}{% if i <= avi.note %}●{% else %}○{% endif %}{% endfor %}
+                </div>
                 <p style="font-size:12px;color:#4A4A3A;line-height:1.6;font-style:italic;margin-bottom:10px">« {{ avi.commentaire }} »</p>
                 <hr style="border-color:#e0ddd5;margin:8px 0">
                 <div class="d-flex align-items-center gap-2">
                     <div style="width:28px;height:28px;border-radius:50%;background:var(--beige);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--brun);flex-shrink:0">
                         {{ avi.utilisateur.prenom|first }}{{ avi.utilisateur.nom|first }}
                     </div>
-                    <div>
-                        <div style="font-size:11px;font-weight:700;color:var(--brun)">{{ avi.utilisateur.prenom }} {{ avi.utilisateur.nom }}</div>
-                    </div>
+                    <div style="font-size:11px;font-weight:700;color:var(--brun)">{{ avi.utilisateur.prenom }} {{ avi.utilisateur.nom }}</div>
                 </div>
             </article>
         </div>
@@ -106,7 +102,7 @@
     <div class="row align-items-center g-4">
         <div class="col-md-6">
             <h2 id="titre-newsletter" style="font-family:'Poppins',sans-serif;font-size:18px;font-weight:600;color:#fff;margin-bottom:6px">Newsletter</h2>
-            <p style="font-size:14px;color:#d0e8d0">Inscrivez-vous pour ne rien rater de nos nouveautés et réductions !</p>
+            <p style="font-size:14px;color:#d0e8d0">Inscrivez-vous à notre newsletter pour ne rien rater entre nos nouveautés, nos actualités et nos réductions !</p>
         </div>
         <div class="col-md-6">
             <form action="#" method="post">
@@ -118,7 +114,7 @@
                 <div class="form-check mt-2">
                     <input class="form-check-input" type="checkbox" id="newsletter-consent" required>
                     <label class="form-check-label" for="newsletter-consent" style="font-size:11px;color:#b0d0b0">
-                        J'accepte de recevoir les communications de Vite &amp; Gourmand. <a href="#" style="color:var(--beige)">Politique de confidentialité</a>
+                        J'accepte de recevoir les communications, actualités et promotions de la part de Vite &amp; Gourmand. Vous pourrez à tout moment vous désinscrire. Pour plus d'information sur le traitement de vos données personnelles, veuillez consulter notre <a href="#" style="color:var(--beige)">Politique de confidentialité</a>.
                     </label>
                 </div>
             </form>
