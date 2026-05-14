@@ -117,4 +117,37 @@ class AdminController extends AbstractController
         $this->addFlash('success', 'Statut mis à jour.');
         return $this->redirectToRoute('app_admin_dashboard');
     }
+#[Route('/avis', name: 'app_admin_avis')]
+public function avis(AvisRepository $avisRepository): Response
+{
+    $avis = $avisRepository->findBy(['valide' => false], ['date_avis' => 'DESC']);
+
+    return $this->render('admin/avis.html.twig', [
+        'avis' => $avis,
+    ]);
 }
+
+#[Route('/avis/{id}/valider', name: 'app_admin_valider_avis', methods: ['POST'])]
+public function validerAvis(int $id, AvisRepository $avisRepository, EntityManagerInterface $em): Response
+{
+    $avi = $avisRepository->find($id);
+    if ($avi) {
+        $avi->setValide(true);
+        $em->flush();
+        $this->addFlash('success', 'Avis validé.');
+    }
+    return $this->redirectToRoute('app_admin_avis');
+}
+
+#[Route('/avis/{id}/refuser', name: 'app_admin_refuser_avis', methods: ['POST'])]
+public function refuserAvis(int $id, AvisRepository $avisRepository, EntityManagerInterface $em): Response
+{
+    $avi = $avisRepository->find($id);
+    if ($avi) {
+        $em->remove($avi);
+        $em->flush();
+        $this->addFlash('success', 'Avis refusé.');
+    }
+    return $this->redirectToRoute('app_admin_avis');
+}
+    }
