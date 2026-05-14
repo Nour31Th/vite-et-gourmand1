@@ -75,9 +75,11 @@
         {% for avi in avis %}
         <div class="col-md-3">
             <article style="background:var(--bgclair);border-radius:8px;padding:16px;border:.5px solid #e0ddd5;height:100%">
-                <div style="color:var(--terre);font-size:13px;margin-bottom:6px" aria-label="{{ avi.note }} étoiles sur 5">
-                   {% for i in 1..avi.note %}●{% endfor %}{% for i in avi.note+1..5 %}○{% endfor %}
-                </div>
+                <div style="color:var(--terre);font-size:14px;margin-bottom:6px" aria-label="{{ avi.note }} sur 5">
+    {% for i in 1..5 %}
+        {% if i <= avi.note %}●{% else %}○{% endif %}
+    {% endfor %}
+</div>
                 <p style="font-size:12px;color:#4A4A3A;line-height:1.6;font-style:italic;margin-bottom:10px">« {{ avi.commentaire }} »</p>
                 <hr style="border-color:#e0ddd5;margin:8px 0">
                 <div class="d-flex align-items-center gap-2">
