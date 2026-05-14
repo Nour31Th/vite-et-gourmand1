@@ -38,17 +38,13 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            try {
-                $email = (new Email())
-                    ->from(new Address('noreply@viteetgourmand.fr', 'Vite & Gourmand'))
-                    ->to((string) $user->getEmail())
-                    ->subject('Bienvenue chez Vite & Gourmand !')
-                    ->html($this->renderView('registration/confirmation_email.html.twig'));
+           $email = (new Email())
+    ->from(new Address('noreply@viteetgourmand.fr', 'Vite & Gourmand'))
+    ->to((string) $user->getEmail())
+    ->subject('Bienvenue chez Vite & Gourmand !')
+    ->html($this->renderView('registration/confirmation_email.html.twig'));
 
-                $mailer->send($email);
-            } catch (\Exception $e) {
-                // Si l'email échoue, on continue quand même
-            }
+$mailer->send($email);
 
             $this->addFlash('success', 'Votre compte a été créé avec succès ! Bienvenue chez Vite & Gourmand.');
             return $this->redirectToRoute('app_home');
