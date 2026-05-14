@@ -20,6 +20,19 @@
         footer a { color:#9A9A7A; text-decoration:none; }
         footer a:hover { color:var(--beige); }
         #navMenu { background:white; padding:0 16px 8px; border-top:1px solid #e0ddd5; box-shadow:0 4px 12px rgba(0,0,0,0.08); }
+
+        /* Logo gauche desktop, centré mobile */
+        .navbar-logo {
+            display: flex;
+            align-items: center;
+        }
+        @media (max-width: 991px) {
+            .navbar-logo {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
     </style>
 </head>
 <body>
@@ -29,33 +42,32 @@
 <nav class="navbar navbar-expand-lg bg-white border-bottom" aria-label="Navigation principale">
     <div class="container-xl px-4">
 
-        {# LIGNE 1 : grille 3 colonnes — hamburger | logo | icônes #}
-        <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:80px;width:100%">
+        {# LIGNE 1 : navbar principale #}
+        <div style="display:flex;align-items:center;height:80px;width:100%;position:relative">
 
-            {# Colonne gauche : hamburger mobile OU liens desktop #}
-            <div class="d-flex align-items-center">
-                {# Hamburger — mobile seulement #}
-                <button class="navbar-toggler d-lg-none border-0 p-0" type="button"
-                        data-bs-toggle="collapse" data-bs-target="#navMenu" aria-label="Ouvrir le menu">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                {# Liens — desktop seulement #}
-                <ul class="navbar-nav d-none d-lg-flex gap-3 mb-0">
-                    <li class="nav-item"><a class="nav-link {% if app.request.attributes.get('_route') == 'app_home' %}active{% endif %}" href="{{ path('app_home') }}">Accueil</a></li>
-                    <li class="nav-item"><a class="nav-link {% if app.request.attributes.get('_route') starts with 'app_menu' %}active{% endif %}" href="{{ path('app_menu_index') }}">Nos menus</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Vos avis</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Aide</a></li>
-                    <li class="nav-item"><a class="nav-link {% if app.request.attributes.get('_route') == 'app_contact' %}active{% endif %}" href="{{ path('app_contact') }}">Contact</a></li>
-                </ul>
-            </div>
+            {# Hamburger — mobile seulement, à gauche #}
+            <button class="navbar-toggler d-lg-none border-0 p-0 me-auto" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#navMenu" aria-label="Ouvrir le menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-            {# Colonne centre : logo toujours centré #}
-            <a href="{{ path('app_home') }}" style="display:flex;justify-content:center;align-items:center">
+            {# Logo — centré mobile (via CSS absolu), gauche desktop #}
+            <a href="{{ path('app_home') }}" class="navbar-logo">
                 <img src="{{ asset('images/logo.svg') }}" alt="Vite et Gourmand" style="height:65px;width:auto">
             </a>
 
-            {# Colonne droite : recherche + icônes — toujours visibles #}
-            <div class="d-flex align-items-center gap-3 justify-content-end">
+            {# Liens — desktop seulement, au centre #}
+            <ul class="navbar-nav d-none d-lg-flex gap-3 mb-0 mx-auto">
+                <li class="nav-item"><a class="nav-link {% if app.request.attributes.get('_route') == 'app_home' %}active{% endif %}" href="{{ path('app_home') }}">Accueil</a></li>
+                <li class="nav-item"><a class="nav-link {% if app.request.attributes.get('_route') starts with 'app_menu' %}active{% endif %}" href="{{ path('app_menu_index') }}">Nos menus</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Vos avis</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Aide</a></li>
+                <li class="nav-item"><a class="nav-link {% if app.request.attributes.get('_route') == 'app_contact' %}active{% endif %}" href="{{ path('app_contact') }}">Contact</a></li>
+            </ul>
+
+            {# Icônes — toujours à droite desktop ET mobile #}
+            <div class="d-flex align-items-center gap-3 ms-auto ms-lg-0">
+
                 {# Recherche — desktop seulement #}
                 <form action="{{ path('app_menu_index') }}" method="get"
                       class="d-none d-lg-flex align-items-center"
@@ -107,7 +119,7 @@
             </div>
         </div>
 
-        {# LIGNE 2 : menu mobile — s'ouvre en dessous, ne touche pas aux icônes #}
+        {# LIGNE 2 : menu mobile collapse #}
         <div class="collapse d-lg-none" id="navMenu">
             <ul class="navbar-nav py-2">
                 <li class="nav-item"><a class="nav-link py-3 {% if app.request.attributes.get('_route') == 'app_home' %}active{% endif %}" style="border-bottom:1px solid #f0ede8" href="{{ path('app_home') }}">Accueil</a></li>
