@@ -8,9 +8,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -21,7 +18,6 @@ class RegistrationController extends AbstractController
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher,
         EntityManagerInterface $entityManager,
-        MailerInterface $mailer
     ): Response {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -39,15 +35,25 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             try {
-                $email = (new Email())
-                    ->from(new Address('ab6828001@smtp-brevo.com', 'Vite & Gourmand'))
-                    ->to((string) $user->getEmail())
-                    ->subject('Bienvenue chez Vite & Gourmand !')
-                    ->html($this->renderView('registration/confirmation_email.html.twig'));
+                $config = \Brevo\Client\Configuration::getDefaultConfiguration()
+                    ->setApiKey('api-key', $_ENV['BREVO_API_KEY']);
 
-                $mailer->send($email);
+                $apiInstance = new \Brevo\Client\Api\TransactionalEmailsApi(
+                    new \GuzzleHttp\Client(),
+                    $config
+                );
+
+                $sendEmail = new \Brevo\Client\Model\SendSmtpEmail([
+                    'sender' => ['email' => 'ab6828001@smtp-brevo.com', 'name' => 'Vite & Gourmand'],
+                    'to' => [['email' => $user->getEmail()]],
+                    'subject' => 'Bienvenue chez Vite & Gourmand !',
+                    'htmlContent' => $this->renderView('registration/confirmation_email.html.twig'),
+                ]);
+
+                $apiInstance->sendTransacEmail($sendEmail);
+
             } catch (\Exception $e) {
-                error_log('MAILER ERROR: ' . $e->getMessage());
+                error_log('BREVO API ERROR: ' . $e->getMessage());
                 $this->addFlash('warning', 'Email non envoyé : ' . $e->getMessage());
             }
 
