@@ -21,7 +21,8 @@ RUN touch .env
 ENV APP_ENV=prod
 ENV APP_DEBUG=0
 
-RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader --no-scripts
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader --no-scripts && \
+    composer dump-autoload --optimize --no-dev
 
 EXPOSE 8080
 
