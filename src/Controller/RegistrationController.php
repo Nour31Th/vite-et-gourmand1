@@ -35,25 +35,36 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             try {
-                $config = \Brevo\Client\Configuration::getDefaultConfiguration()
-                    ->setApiKey('api-key', $_ENV['BREVO_API_KEY']);
+                $apiKey = $_ENV['BREVO_API_KEY'];
+                $htmlContent = $this->renderView('registration/confirmation_email.html.twig');
 
-                $apiInstance = new \Brevo\Client\Api\TransactionalEmailsApi(
-                    new \GuzzleHttp\Client(),
-                    $config
-                );
-
-                $sendEmail = new \Brevo\Client\Model\SendSmtpEmail([
+                $data = json_encode([
                     'sender' => ['email' => 'ab6828001@smtp-brevo.com', 'name' => 'Vite & Gourmand'],
                     'to' => [['email' => $user->getEmail()]],
                     'subject' => 'Bienvenue chez Vite & Gourmand !',
-                    'htmlContent' => $this->renderView('registration/confirmation_email.html.twig'),
+                    'htmlContent' => $htmlContent,
                 ]);
 
-                $apiInstance->sendTransacEmail($sendEmail);
+                $ch = curl_init('https://api.brevo.com/v3/smtp/email');
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                    'Content-Type: application/json',
+                    'api-key: ' . $apiKey,
+                ]);
+
+                $response = curl_exec($ch);
+                $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                curl_close($ch);
+
+                if ($httpCode !== 201) {
+                    error_log('BREVO ERROR: ' . $response);
+                    $this->addFlash('warning', 'Email non envoyé : ' . $response);
+                }
 
             } catch (\Exception $e) {
-                error_log('BREVO API ERROR: ' . $e->getMessage());
+                error_log('BREVO EXCEPTION: ' . $e->getMessage());
                 $this->addFlash('warning', 'Email non envoyé : ' . $e->getMessage());
             }
 
