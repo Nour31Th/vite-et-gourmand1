@@ -46,11 +46,8 @@ class RegistrationController extends AbstractController
                     ->html($this->renderView('registration/confirmation_email.html.twig'));
 
                 $mailer->send($email);
-                } catch (\Exception $e) {
-    error_log('MAILER ERROR: ' . $e->getMessage());
-    $this->addFlash('warning', 'Email non envoyé : ' . $e->getMessage());
-}
             } catch (\Exception $e) {
+                error_log('MAILER ERROR: ' . $e->getMessage());
                 $this->addFlash('warning', 'Email non envoyé : ' . $e->getMessage());
             }
 
