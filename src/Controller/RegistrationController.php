@@ -40,14 +40,14 @@ class RegistrationController extends AbstractController
 
             try {
                 $email = (new Email())
-                    ->from(new Address('thualmiora.31@gmail.com', 'Vite & Gourmand'))
+                    ->from(new Address('ab6828001@smtp-brevo.com', 'Vite & Gourmand'))
                     ->to((string) $user->getEmail())
                     ->subject('Bienvenue chez Vite & Gourmand !')
                     ->html($this->renderView('registration/confirmation_email.html.twig'));
 
                 $mailer->send($email);
             } catch (\Exception $e) {
-                // Si l'email échoue, on continue quand même
+                $this->addFlash('warning', 'Email non envoyé : ' . $e->getMessage());
             }
 
             $this->addFlash('success', 'Votre compte a été créé avec succès ! Bienvenue chez Vite & Gourmand.');
