@@ -21,8 +21,8 @@ RUN touch .env
 ENV APP_ENV=prod
 ENV APP_DEBUG=0
 
-RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader --no-scripts
 
 EXPOSE 8080
 
-CMD sh -c "php bin/console cache:warmup --env=prod --no-debug && php bin/console doctrine:migrations:migrate --no-interaction --env=prod --no-debug && php -S 0.0.0.0:${PORT:-8080} -t public/"
+CMD sh -c "php bin/console cache:clear --env=prod --no-debug && php bin/console cache:warmup --env=prod --no-debug && php bin/console doctrine:migrations:migrate --no-interaction --env=prod --no-debug && php -S 0.0.0.0:${PORT:-8080} -t public/"
