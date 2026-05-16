@@ -44,13 +44,16 @@
         "symfonycasts/reset-password-bundle": "*",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0",
-        "symfonycasts/verify-email-bundle": "^1.18"
+        "symfonycasts/verify-email-bundle": "^1.18",
+        "getbrevo/brevo-php": "^4.0",
+        "nyholm/psr7": "^1.8"
     },
  "config": {
     "allow-plugins": {
-        "symfony/flex": true,
-        "symfony/runtime": true
-    }
+            "symfony/flex": true,
+            "symfony/runtime": true,
+            "php-http/discovery": true
+        }
 },
     "autoload": {
         "psr-4": {
