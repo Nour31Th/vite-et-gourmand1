@@ -16,6 +16,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /app
 COPY . .
 
+RUN touch .env
+
 RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader
 
 ENV APP_ENV=prod
