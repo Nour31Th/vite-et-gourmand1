@@ -39,7 +39,7 @@ class RegistrationController extends AbstractController
                 $htmlContent = $this->renderView('registration/confirmation_email.html.twig');
 
                 $data = json_encode([
-                    'sender' => ['email' => 'ab6828001@smtp-brevo.com', 'name' => 'Vite & Gourmand'],
+                    'sender' => ['email' => 'thualmiora.31@gmail.com', 'name' => 'Vite & Gourmand'],
                     'to' => [['email' => $user->getEmail()]],
                     'subject' => 'Bienvenue chez Vite & Gourmand !',
                     'htmlContent' => $htmlContent,
