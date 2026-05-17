@@ -64,8 +64,7 @@ class RegistrationController extends AbstractController
                 }
 
             } catch (\Exception $e) {
-                error_log('BREVO EXCEPTION: ' . $e->getMessage());
-                $this->addFlash('warning', 'Email non envoyé : ' . $e->getMessage());
+                      error_log('BREVO EXCEPTION: ' . $e->getMessage());
             }
 
             $this->addFlash('success', 'Votre compte a été créé avec succès ! Bienvenue chez Vite & Gourmand.');
